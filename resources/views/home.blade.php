@@ -11,7 +11,7 @@
                 Main Futsal Tanpa Ribet,<br class="hidden md:block"> Booking Lapangan Sekarang
             </h1>
             <p class="mx-auto mt-4 max-w-xl text-white/70">
-                Soccer Bumi Teuku Umar &mdash; cek jadwal, pilih jam, dan bayar online langsung dari HP. Tersedia paket bulanan buat kamu yang main rutin.
+                Soccer Bumi Teuku Umar: cek jadwal, pilih jam, dan bayar online langsung dari HP. Tersedia paket bulanan buat kamu yang main rutin.
             </p>
 
             <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -128,7 +128,7 @@
                                 @elseif ($cell['isPast'] || $cell['sisa'] === 0)
                                     <div class="rounded-lg border border-slate-100 bg-slate-50 p-2 text-center">
                                         <div class="text-xs font-medium text-slate-400">{{ $cell['date']->day }}</div>
-                                        <div class="mt-1 text-[11px] text-slate-300">&mdash;</div>
+                                        <div class="mt-1 text-[11px] text-slate-300">&nbsp;</div>
                                     </div>
                                 @else
                                     <a href="{{ route('home', ['lapangan_id' => $lapangan->id, 'bulan' => $bulan->format('Y-m'), 'tanggal' => $cell['date']->toDateString()]) }}#pilih-lapangan"
@@ -182,10 +182,12 @@
                                                     {{ substr($slot->jam_mulai, 0, 5) }}-{{ substr($slot->jam_selesai, 0, 5) }}
                                                 </div>
                                                 @if ($item['status'] === 'closed')
-                                                    <div class="mt-1 text-xs font-semibold text-slate-500">CLOSE</div>
+                                                    <div class="mt-1 text-xs font-semibold text-slate-500">Tutup</div>
+                                                @elseif ($item['status'] === 'lewat')
+                                                    <div class="mt-1 text-xs font-semibold text-slate-500">Sudah Lewat</div>
                                                 @else
                                                     <div class="mt-1 text-xs text-slate-600">Rp{{ number_format($slot->hargaUntukTanggal($tanggal, 'guest'), 0, ',', '.') }}</div>
-                                                    <div class="mt-1 text-xs font-semibold text-red-600">Booked</div>
+                                                    <div class="mt-1 text-xs font-semibold text-red-600">Terisi</div>
                                                 @endif
                                             </div>
                                         @endif
@@ -210,8 +212,8 @@
                 <h2 class="mt-2 text-2xl font-bold text-slate-800">Soccer Bumi Teuku Umar</h2>
                 <p class="mt-4 leading-relaxed text-slate-600">
                     Penyedia lapangan futsal dengan beberapa lapangan berkualitas, terbuka untuk umum maupun
-                    member berlangganan bulanan. Booking jadwal lebih mudah lewat sistem online ini &mdash;
-                    lihat ketersediaan lapangan secara real-time dan bayar langsung lewat payment gateway.
+                    member berlangganan bulanan. Booking jadwal lebih mudah lewat sistem online ini, lihat
+                    ketersediaan lapangan secara real-time dan bayar langsung lewat payment gateway.
                 </p>
                 <a href="#jadwal" class="mt-6 inline-block rounded-lg bg-navy px-6 py-3 font-semibold text-white hover:bg-navy-dark">
                     Lihat Jadwal Sekarang
@@ -237,7 +239,7 @@
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold/20 font-bold text-navy">3</span>
                     <div>
                         <div class="font-semibold text-slate-800">Pembayaran Online Aman</div>
-                        <div class="text-sm text-slate-500">Transfer bank, e-wallet, sampai kartu &mdash; semua lewat Midtrans, langsung terkonfirmasi.</div>
+                        <div class="text-sm text-slate-500">Transfer bank, e-wallet, sampai kartu, semua lewat Midtrans dan langsung terkonfirmasi.</div>
                     </div>
                 </div>
             </div>

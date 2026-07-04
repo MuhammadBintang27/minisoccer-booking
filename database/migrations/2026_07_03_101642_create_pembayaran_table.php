@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
             $table->morphs('payable');
-            $table->string('midtrans_order_id')->unique();
+            $table->enum('channel', ['midtrans', 'cash'])->default('midtrans');
+            $table->foreignId('dikonfirmasi_oleh')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('midtrans_order_id')->nullable()->unique();
             $table->string('midtrans_transaction_id')->nullable();
             $table->decimal('jumlah', 10, 2);
             $table->string('metode_pembayaran')->nullable();

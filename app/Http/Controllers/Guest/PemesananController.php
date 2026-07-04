@@ -58,25 +58,44 @@ class PemesananController extends Controller
         return redirect()->signedRoute('guest.pemesanan.show', ['pemesanan' => $pemesanan->id]);
     }
 
-    public function show(Pemesanan $pemesanan, PaymentService $paymentService): View
+    public function show(Pemesanan $pemesanan): View
     {
-        $snapToken = null;
+        $opsiBayar = [];
 
         if ($pemesanan->status === 'pending') {
-            $result = $paymentService->getOrCreateSnapTransaction(
-                $pemesanan,
-                $pemesanan->totalHarga(),
-                'BOOK',
-                [
-                    'first_name' => $pemesanan->nama_tamu,
-                    'phone' => $pemesanan->no_hp_tamu,
-                ],
-            );
-
-            $snapToken = $result['snap_token'];
+            $opsiBayar[] = ['jenis' => 'dp', 'label' => 'Bayar DP (25%)', 'jumlah' => $pemesanan->dpMinimum()];
+        } elseif ($pemesanan->status === 'confirmed' && $pemesanan->sisaTagihan() > 0) {
+            // Non-member cuma DP di awal, sisanya langsung 1x pelunasan (tidak ada opsi cicil lagi)
+            $opsiBayar[] = ['jenis' => 'lunas', 'label' => 'Lunasi Sekarang', 'jumlah' => $pemesanan->sisaTagihan()];
         }
 
-        return view('guest.pemesanan.show', compact('pemesanan', 'snapToken'));
+        $opsiBayarUrl = URL::signedRoute('guest.pemesanan.opsi-bayar', ['pemesanan' => $pemesanan->id]);
+
+        return view('guest.pemesanan.show', compact('pemesanan', 'opsiBayar', 'opsiBayarUrl'));
+    }
+
+    /**
+     * Baris `pembayaran` (dan Snap token) baru dibuat di sini — dipanggil lewat fetch()
+     * hanya saat tombol bayar benar-benar diklik, bukan saat halaman status di-load.
+     */
+    public function opsiBayar(Request $request, Pemesanan $pemesanan, PaymentService $paymentService)
+    {
+        $customerDetails = [
+            'first_name' => $pemesanan->nama_tamu,
+            'phone' => $pemesanan->no_hp_tamu,
+        ];
+
+        $jumlah = match (true) {
+            $request->input('jenis') === 'dp' && $pemesanan->status === 'pending' => $pemesanan->dpMinimum(),
+            $request->input('jenis') === 'lunas' && $pemesanan->status === 'confirmed' => $pemesanan->sisaTagihan(),
+            default => null,
+        };
+
+        abort_if($jumlah === null || $jumlah <= 0, 422);
+
+        $result = $paymentService->getOrCreateSnapTransaction($pemesanan, $jumlah, 'BOOK', $customerDetails);
+
+        return response()->json(['snap_token' => $result['snap_token']]);
     }
 
     public function cek(Request $request): View

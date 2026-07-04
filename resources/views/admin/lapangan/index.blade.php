@@ -1,10 +1,9 @@
 <x-layouts.admin title="Data Lapangan">
-    <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-slate-800">Data Lapangan</h2>
+    <x-slot:actions>
         <a href="{{ route('admin.lapangan.create') }}" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
             Tambah Lapangan
         </a>
-    </div>
+    </x-slot:actions>
 
     @if (session('status'))
         <div class="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">

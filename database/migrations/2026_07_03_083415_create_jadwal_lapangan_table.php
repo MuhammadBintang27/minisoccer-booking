@@ -16,7 +16,10 @@ return new class extends Migration
             $table->foreignId('lapangan_id')->constrained('lapangan')->cascadeOnDelete();
             $table->time('jam_mulai');
             $table->time('jam_selesai');
-            $table->decimal('harga', 10, 2);
+            $table->decimal('harga_weekday_member', 10, 2);
+            $table->decimal('harga_weekend_member', 10, 2);
+            $table->decimal('harga_weekday_nonmember', 10, 2);
+            $table->decimal('harga_weekend_nonmember', 10, 2);
             $table->boolean('is_closed')->default(false);
             $table->timestamps();
         });

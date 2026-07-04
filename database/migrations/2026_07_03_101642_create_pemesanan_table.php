@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lapangan_id')->constrained('lapangan')->cascadeOnDelete();
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete();
+            $table->foreignId('paket_langganan_id')->nullable()->constrained('paket_langganan')->nullOnDelete();
             $table->enum('sumber', ['member', 'guest']);
             $table->string('nama_tamu')->nullable();
             $table->string('no_hp_tamu')->nullable();
@@ -25,11 +26,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'expired', 'cancelled', 'completed'])->default('pending');
             $table->timestamp('hold_expires_at')->nullable();
             $table->timestamps();
-
-            $table->string('slot_aktif_key', 60)
-                ->nullable()
-                ->virtualAs("CASE WHEN status IN ('cancelled', 'expired') THEN NULL ELSE CONCAT(lapangan_id, '-', tanggal_main, '-', jam_mulai) END");
-            $table->unique('slot_aktif_key');
         });
     }
 

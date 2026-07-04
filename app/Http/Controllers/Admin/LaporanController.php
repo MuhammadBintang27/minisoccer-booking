@@ -37,12 +37,13 @@ class LaporanController extends Controller
 
         foreach ($pembayaran as $item) {
             $sumber = $item->payable_type === PaketLangganan::class ? 'Member' : 'Guest';
+            $metode = $item->channel === 'cash' ? 'Cash' : ($item->metode_pembayaran ?? 'Online');
             $csv .= sprintf(
                 "%s,%s,%s,%s,%s\n",
                 $item->paid_at->format('Y-m-d H:i'),
                 $item->midtrans_order_id,
                 $sumber,
-                $item->metode_pembayaran,
+                $metode,
                 $item->jumlah,
             );
         }

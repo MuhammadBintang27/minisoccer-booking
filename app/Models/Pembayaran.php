@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -13,6 +14,7 @@ class Pembayaran extends Model
     protected $fillable = [
         'payable_type',
         'payable_id',
+        'channel',
         'midtrans_order_id',
         'midtrans_transaction_id',
         'jumlah',
@@ -20,6 +22,7 @@ class Pembayaran extends Model
         'status',
         'raw_notification_payload',
         'paid_at',
+        'dikonfirmasi_oleh',
     ];
 
     protected function casts(): array
@@ -39,5 +42,10 @@ class Pembayaran extends Model
     public function logPembayaran(): HasMany
     {
         return $this->hasMany(LogPembayaran::class);
+    }
+
+    public function dikonfirmasiOleh(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'dikonfirmasi_oleh');
     }
 }

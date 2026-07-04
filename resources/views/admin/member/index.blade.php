@@ -1,6 +1,4 @@
 <x-layouts.admin title="Data Member">
-    <h2 class="text-lg font-semibold text-slate-800">Data Member</h2>
-
     @if (session('status'))
         <div class="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
             {{ session('status') }}
@@ -32,7 +30,7 @@
                         <td class="px-4 py-3 text-slate-600">{{ $item->tanggal_gabung->translatedFormat('d M Y') }}</td>
                         <td class="px-4 py-3">
                             <span class="rounded-full px-2 py-0.5 text-xs font-semibold {{ $item->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600' }}">
-                                {{ ucfirst($item->status) }}
+                                {{ \App\Support\StatusLabel::label($item->status) }}
                             </span>
                         </td>
                         <td class="px-4 py-3">
@@ -44,7 +42,7 @@
                                     'bg-green-100 text-green-700' => $paketTerakhir->status === 'active',
                                     'bg-slate-200 text-slate-600' => in_array($paketTerakhir->status, ['expired', 'cancelled', 'failed']),
                                 ])>
-                                    {{ ucfirst(str_replace('_', ' ', $paketTerakhir->status)) }}
+                                    {{ \App\Support\StatusLabel::label($paketTerakhir->status) }}
                                 </span>
                             @else
                                 <span class="text-xs text-slate-400">Belum pernah beli</span>

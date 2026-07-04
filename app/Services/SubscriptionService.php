@@ -19,6 +19,30 @@ class SubscriptionService
     public function __construct(private AvailabilityService $availability) {}
 
     /**
+     * Tanggal kemunculan pertama suatu hari pada/sesudah awal bulan yang dipilih (belum digeser
+     * ke minggu berikutnya walau sudah lewat hari ini — dipakai untuk hitung apakah kemunculan
+     * pertama itu sudah lewat, bukan untuk hasil akhir tanggal pertemuan).
+     */
+    private function kemunculanPertama(int $hariIso, Carbon $bulan): Carbon
+    {
+        $cursor = $bulan->copy()->startOfMonth();
+        while ($cursor->dayOfWeekIso !== $hariIso) {
+            $cursor->addDay();
+        }
+
+        return $cursor;
+    }
+
+    /**
+     * True kalau kemunculan pertama hari tersebut di bulan yang dipilih sudah lewat dari hari ini
+     * — jadi member harus pindah ke bulan depan supaya paket tidak "meloncat" minggu di tengah bulan ini.
+     */
+    public function hariSudahLewatUntukBulan(int $hariIso, Carbon $bulan): bool
+    {
+        return $this->kemunculanPertama($hariIso, $bulan)->lt(Carbon::today());
+    }
+
+    /**
      * Hitung 4 tanggal (4 minggu) berturut-turut yang jatuh pada hari tertentu, dimulai dari
      * kemunculan pertama hari itu pada/sesudah awal bulan yang dipilih (dan tidak boleh sebelum hari ini).
      * Selalu tepat 4 kali per paket — bukan mengikuti jumlah kemunculan hari itu dalam bulan kalender
@@ -29,11 +53,7 @@ class SubscriptionService
     public function computeOccurrenceDates(int $hariIso, Carbon $bulan): array
     {
         $today = Carbon::today();
-
-        $cursor = $bulan->copy()->startOfMonth();
-        while ($cursor->dayOfWeekIso !== $hariIso) {
-            $cursor->addDay();
-        }
+        $cursor = $this->kemunculanPertama($hariIso, $bulan);
 
         while ($cursor->lt($today)) {
             $cursor->addWeek();
@@ -61,6 +81,10 @@ class SubscriptionService
         $jamSelesai = $sorted->last()->jam_selesai;
 
         $tanggalList = $this->computeOccurrenceDates($hariIso, $bulan);
+
+        if ($tanggalList[0]->isToday() && $jamMulai <= now()->format('H:i:s')) {
+            throw new SlotTidakTersediaException('Slot jam ini sudah lewat untuk hari ini. Silakan pilih jam lain.');
+        }
 
         // hari (weekday/weekend) sama untuk semua kemunculan tanggal karena hari-dalam-minggu-nya tetap
         $hargaPerPertemuan = $sorted->sum(fn ($slot) => $slot->hargaUntukTanggal($tanggalList[0], 'member'));

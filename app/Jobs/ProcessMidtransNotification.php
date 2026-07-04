@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\PaketLangganan;
 use App\Models\Pembayaran;
 use App\Models\Pemesanan;
+use App\Services\PaymentService;
 use App\Services\SubscriptionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -16,9 +17,9 @@ class ProcessMidtransNotification implements ShouldQueue
 
     public function __construct(private int $pembayaranId, private array $payload) {}
 
-    public function handle(SubscriptionService $subscriptionService): void
+    public function handle(SubscriptionService $subscriptionService, PaymentService $paymentService): void
     {
-        DB::transaction(function () use ($subscriptionService) {
+        DB::transaction(function () use ($subscriptionService, $paymentService) {
             $pembayaran = Pembayaran::where('id', $this->pembayaranId)->lockForUpdate()->first();
 
             if (! $pembayaran) {
@@ -48,24 +49,24 @@ class ProcessMidtransNotification implements ShouldQueue
 
             $payable = $pembayaran->payable()->lockForUpdate()->first();
 
-            if ($payable instanceof Pemesanan) {
+            if ($statusBaru === 'settlement') {
+                $paymentService->applySettlementEffects($payable, $pembayaran);
+
+                return;
+            }
+
+            // Gagal/expired/dibatalkan: booking/paket cuma dibatalkan kalau ini kegagalan DP
+            // pertama (masih pending/pending_payment). Kalau sudah confirmed/active dari DP
+            // sebelumnya, ini cuma cicilan/pelunasan yang gagal — booking tetap jalan, sisa
+            // tagihan tetap ada, member/guest bisa coba bayar lagi.
+            if ($payable instanceof Pemesanan && $payable->status === 'pending') {
                 $payable->update([
-                    'status' => match ($statusBaru) {
-                        'settlement' => 'confirmed',
-                        'expire' => 'expired',
-                        'deny', 'cancel' => 'cancelled',
-                        default => $payable->status,
-                    },
+                    'status' => $statusBaru === 'expire' ? 'expired' : 'cancelled',
                 ]);
             }
 
-            if ($payable instanceof PaketLangganan) {
-                match ($statusBaru) {
-                    'settlement' => $subscriptionService->activateSubscription($payable),
-                    'expire' => $subscriptionService->releaseSubscription($payable, 'expired'),
-                    'deny', 'cancel' => $subscriptionService->releaseSubscription($payable, 'cancelled'),
-                    default => null,
-                };
+            if ($payable instanceof PaketLangganan && $payable->status === 'pending_payment') {
+                $subscriptionService->releaseSubscription($payable, $statusBaru === 'expire' ? 'expired' : 'cancelled');
             }
         });
     }

@@ -1,6 +1,6 @@
 <x-layouts.admin title="Edit Member">
     <div class="max-w-xl rounded-xl bg-white p-6 shadow-sm">
-        <h2 class="text-lg font-semibold text-slate-800">Edit Member &mdash; {{ $member->kode_member }}</h2>
+        <h2 class="text-lg font-semibold text-slate-800">Edit Member ({{ $member->kode_member }})</h2>
 
         @if ($errors->any())
             <div class="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">

@@ -29,7 +29,7 @@
                                     'bg-green-100 text-green-700' => in_array($item->status, ['confirmed', 'completed']),
                                     'bg-slate-200 text-slate-600' => in_array($item->status, ['expired', 'cancelled']),
                                 ])>
-                                    {{ ucfirst($item->status) }}
+                                    {{ \App\Support\StatusLabel::label($item->status) }}
                                 </span>
                             </td>
                         </tr>

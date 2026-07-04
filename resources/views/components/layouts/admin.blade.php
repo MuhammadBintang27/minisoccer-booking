@@ -38,24 +38,26 @@
                     Laporan
                 </a>
             </nav>
+
+            <div class="border-t border-white/10 px-4 py-4">
+                <div class="text-sm font-medium text-white">{{ auth()->user()->name }}</div>
+                <div class="text-xs text-white/60">Administrator</div>
+                <form method="POST" action="{{ route('logout') }}" class="mt-3">
+                    @csrf
+                    <button type="submit" class="w-full rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
+                        Logout
+                    </button>
+                </form>
+            </div>
         </aside>
 
         <div class="flex-1 flex flex-col">
             <header class="flex items-center justify-between bg-white px-8 py-4 shadow-sm">
                 <h1 class="text-xl font-semibold text-slate-800">{{ $title }}</h1>
 
-                <div class="flex items-center gap-4">
-                    <div class="text-right">
-                        <div class="text-sm font-medium text-slate-800">{{ auth()->user()->name }}</div>
-                        <div class="text-xs text-slate-500">Administrator</div>
-                    </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
-                            Logout
-                        </button>
-                    </form>
-                </div>
+                @isset($actions)
+                    <div class="flex items-center gap-3">{{ $actions }}</div>
+                @endisset
             </header>
 
             <main class="flex-1 p-8">

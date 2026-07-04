@@ -1,10 +1,5 @@
 <x-layouts.admin title="Ubah Jadwal - {{ $lapangan->nama }}">
-    <div class="flex items-center justify-between">
-        <div>
-            <a href="{{ route('admin.lapangan.index') }}" class="text-sm text-slate-500 hover:underline">&larr; Data Lapangan</a>
-            <h2 class="mt-1 text-lg font-semibold text-slate-800">Ubah Jadwal &mdash; {{ $lapangan->nama }}</h2>
-        </div>
-    </div>
+    <a href="{{ route('admin.lapangan.index') }}" class="text-sm text-slate-500 hover:underline">&larr; Data Lapangan</a>
 
     @if (session('status'))
         <div class="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
@@ -28,7 +23,7 @@
                         {{ substr($slot->jam_mulai, 0, 5) }}-{{ substr($slot->jam_selesai, 0, 5) }}
                     </div>
                     @if ($slot->is_closed)
-                        <div class="mt-1 text-xs font-semibold text-slate-500">CLOSE</div>
+                        <div class="mt-1 text-xs font-semibold text-slate-500">Tutup</div>
                     @else
                         <div class="mt-2 text-xs text-slate-600">
                             <div class="font-semibold text-slate-700">Member</div>

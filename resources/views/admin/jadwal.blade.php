@@ -1,12 +1,11 @@
 <x-layouts.admin title="Data Jadwal">
-    <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-slate-800">Data Jadwal</h2>
-        @if ($lapangan)
+    @if ($lapangan)
+        <x-slot:actions>
             <a href="{{ route('admin.lapangan.jadwal.index', $lapangan) }}" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
                 Ubah Jadwal
             </a>
-        @endif
-    </div>
+        </x-slot:actions>
+    @endif
 
     <form method="GET" action="{{ route('admin.jadwal.index') }}" class="mt-4 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm">
         <div class="flex-1 min-w-[200px]">
@@ -47,6 +46,7 @@
                 <span>Keterangan:</span>
                 <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-gold"></span> Tersedia</span>
                 <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-slate-300"></span> Penuh/Tutup</span>
+                <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-slate-400"></span> Sudah Lewat</span>
             </div>
 
             <div class="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase text-slate-400">
@@ -64,10 +64,20 @@
                     @foreach ($minggu as $cell)
                         @if (is_null($cell))
                             <div></div>
+                        @elseif ($cell['isPast'] || ($cell['date']->isToday() && $cell['sisa'] === 0))
+                            <a href="{{ route('admin.jadwal.index', ['lapangan_id' => $lapangan->id, 'bulan' => $bulan->format('Y-m'), 'tanggal' => $cell['date']->toDateString()]) }}"
+                                class="rounded-lg border p-2 text-center hover:border-slate-300 {{ $tanggal && $tanggal->isSameDay($cell['date']) ? 'border-gold bg-gold/10' : 'border-slate-100 bg-slate-50' }}">
+                                <div class="text-xs font-medium text-slate-400">{{ $cell['date']->day }}</div>
+                                <div class="mt-1 flex items-center justify-center gap-1 text-[11px] text-slate-400">
+                                    <span class="flex h-4 w-4 items-center justify-center rounded-full bg-slate-300 text-[10px] font-bold text-slate-600">{{ $cell['terisi'] }}</span>
+                                    /{{ $cell['total'] }}
+                                </div>
+                                <div class="text-[9px] uppercase tracking-wide text-slate-300">Lewat</div>
+                            </a>
                         @elseif ($cell['sisa'] === 0)
                             <div class="rounded-lg border border-slate-100 bg-slate-50 p-2 text-center">
                                 <div class="text-xs font-medium text-slate-400">{{ $cell['date']->day }}</div>
-                                <div class="mt-1 text-[11px] text-slate-300">&mdash;</div>
+                                <div class="mt-1 text-[11px] text-slate-300">&nbsp;</div>
                             </div>
                         @else
                             <a href="{{ route('admin.jadwal.index', ['lapangan_id' => $lapangan->id, 'bulan' => $bulan->format('Y-m'), 'tanggal' => $cell['date']->toDateString()]) }}"
@@ -105,10 +115,12 @@
                                     {{ substr($slot->jam_mulai, 0, 5) }}-{{ substr($slot->jam_selesai, 0, 5) }}
                                 </div>
                                 @if ($item['status'] === 'closed')
-                                    <div class="mt-1 text-xs font-semibold text-slate-500">CLOSE</div>
+                                    <div class="mt-1 text-xs font-semibold text-slate-500">Tutup</div>
                                 @elseif ($item['status'] === 'booked')
                                     <div class="mt-1 text-xs text-slate-600">Rp{{ number_format($slot->hargaUntukTanggal($tanggal, $item['sumber']), 0, ',', '.') }}</div>
-                                    <div class="mt-1 text-xs font-semibold text-red-600">Booked ({{ $item['sumber'] === 'member' ? 'Member' : 'Guest' }})</div>
+                                    <div class="mt-1 text-xs font-semibold text-red-600">Terisi ({{ $item['sumber'] === 'member' ? 'Member' : 'Guest' }})</div>
+                                @elseif ($item['status'] === 'lewat')
+                                    <div class="mt-1 text-xs font-semibold text-slate-500">Sudah Lewat</div>
                                 @else
                                     <div class="mt-1 text-xs text-slate-600">
                                         Member Rp{{ number_format($slot->hargaUntukTanggal($tanggal, 'member'), 0, ',', '.') }}<br>

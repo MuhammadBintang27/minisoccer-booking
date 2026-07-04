@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Pemesanan extends Model
 {
+    /**
+     * DP minimum sebagai persentase dari total harga sebelum booking dianggap terkonfirmasi.
+     */
+    public const DP_PERSEN = 0.25;
+
     protected $table = 'pemesanan';
 
     protected $fillable = [
@@ -50,9 +55,13 @@ class Pemesanan extends Model
         return $this->belongsTo(PaketLangganan::class);
     }
 
-    public function pembayaran(): MorphOne
+    /**
+     * Hanya terisi untuk booking guest (sumber=guest) — pembayaran member
+     * ada di paket_langganan induknya, bukan di sini.
+     */
+    public function pembayaran(): MorphMany
     {
-        return $this->morphOne(Pembayaran::class, 'payable');
+        return $this->morphMany(Pembayaran::class, 'payable');
     }
 
     public function layananTambahan(): BelongsToMany
@@ -62,17 +71,42 @@ class Pemesanan extends Model
             ->withTimestamps();
     }
 
-    public function statusPembayaran(): string
-    {
-        if ($this->sumber === 'member') {
-            return $this->paketLangganan?->pembayaran?->status ?? '-';
-        }
-
-        return $this->pembayaran?->status ?? '-';
-    }
-
     public function totalHarga(): float
     {
         return (float) $this->harga + (float) $this->layananTambahan->sum('pivot.harga');
+    }
+
+    public function totalDibayar(): float
+    {
+        if ($this->sumber === 'member') {
+            return $this->paketLangganan?->totalDibayar() ?? 0.0;
+        }
+
+        return (float) $this->pembayaran()->where('status', 'settlement')->sum('jumlah');
+    }
+
+    public function sisaTagihan(): float
+    {
+        return max(0.0, $this->totalHarga() - $this->totalDibayar());
+    }
+
+    public function dpMinimum(): float
+    {
+        return round($this->totalHarga() * self::DP_PERSEN);
+    }
+
+    public function statusPembayaran(): string
+    {
+        if ($this->sumber === 'member') {
+            return $this->paketLangganan?->statusPembayaran() ?? '-';
+        }
+
+        $dibayar = $this->totalDibayar();
+
+        return match (true) {
+            $dibayar <= 0 => 'Belum bayar',
+            $dibayar >= $this->totalHarga() => 'Lunas',
+            default => 'DP (Rp'.number_format($dibayar, 0, ',', '.').'/Rp'.number_format($this->totalHarga(), 0, ',', '.').')',
+        };
     }
 }

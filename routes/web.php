@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\JadwalController as AdminJadwalController;
 use App\Http\Controllers\Admin\JadwalLapanganController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\LapanganController;
+use App\Http\Controllers\Admin\LanggananController as AdminLanggananController;
 use App\Http\Controllers\Admin\LayananTambahanController;
 use App\Http\Controllers\Admin\MemberController as AdminMemberController;
 use App\Http\Controllers\Admin\PemesananController as AdminPemesananController;
@@ -28,6 +29,7 @@ Route::prefix('pesan')->name('guest.pemesanan.')->group(function () {
     Route::get('/', [GuestPemesananController::class, 'create'])->name('create');
     Route::post('/', [GuestPemesananController::class, 'store'])->name('store')->middleware('throttle:5,1');
     Route::get('/{pemesanan}/status', [GuestPemesananController::class, 'show'])->name('show')->middleware('signed');
+    Route::post('/{pemesanan}/opsi-bayar', [GuestPemesananController::class, 'opsiBayar'])->name('opsi-bayar')->middleware('signed');
 });
 
 Route::get('/cek-pemesanan', [GuestPemesananController::class, 'cek'])->name('guest.pemesanan.cek')->middleware('throttle:20,1');
@@ -50,6 +52,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/jadwal', [AdminJadwalController::class, 'index'])->name('jadwal.index');
 
     Route::get('/pemesanan', [AdminPemesananController::class, 'index'])->name('pemesanan.index');
+    Route::get('/pemesanan/{pemesanan}', [AdminPemesananController::class, 'show'])->name('pemesanan.show');
+    Route::post('/pemesanan/{pemesanan}/bayar-cash', [AdminPemesananController::class, 'bayarCash'])->name('pemesanan.bayar-cash');
+    Route::post('/pemesanan/{pemesanan}/buat-transaksi-online', [AdminPemesananController::class, 'buatTransaksiOnline'])->name('pemesanan.buat-transaksi-online');
+
+    Route::get('/langganan/{paket}', [AdminLanggananController::class, 'show'])->name('langganan.show');
+    Route::post('/langganan/{paket}/bayar-cash', [AdminLanggananController::class, 'bayarCash'])->name('langganan.bayar-cash');
+    Route::post('/langganan/{paket}/buat-transaksi-online', [AdminLanggananController::class, 'buatTransaksiOnline'])->name('langganan.buat-transaksi-online');
 
     Route::resource('member', AdminMemberController::class)->only(['index', 'edit', 'update', 'destroy']);
 
@@ -73,4 +82,5 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'role:member'])->g
     Route::get('/langganan/create', [LanggananController::class, 'create'])->name('langganan.create');
     Route::post('/langganan', [LanggananController::class, 'store'])->name('langganan.store');
     Route::get('/langganan/{paket}', [LanggananController::class, 'show'])->name('langganan.show');
+    Route::post('/langganan/{paket}/opsi-bayar', [LanggananController::class, 'opsiBayar'])->name('langganan.opsi-bayar');
 });

@@ -34,10 +34,19 @@ class LanggananController extends Controller
         $hari = $request->query('hari') ? (int) $request->query('hari') : null;
         $bulan = $request->query('bulan') ? Carbon::parse($request->query('bulan').'-01') : Carbon::today()->startOfMonth();
 
+        $hariLewatPerBulan = $bulanOptions->mapWithKeys(function (Carbon $opsiBulan) use ($subscriptionService) {
+            $lewat = collect(range(1, 7))->filter(
+                fn (int $h) => $subscriptionService->hariSudahLewatUntukBulan($h, $opsiBulan)
+            )->values();
+
+            return [$opsiBulan->format('Y-m') => $lewat];
+        });
+
         $tanggalPreview = collect();
         $previewPerSlot = [];
+        $hariSudahLewat = $hari && $subscriptionService->hariSudahLewatUntukBulan($hari, $bulan);
 
-        if ($lapangan && $hari) {
+        if ($lapangan && $hari && ! $hariSudahLewat) {
             $tanggalPreview = collect($subscriptionService->computeOccurrenceDates($hari, $bulan));
 
             $statusPerTanggal = $tanggalPreview->map(
@@ -52,7 +61,7 @@ class LanggananController extends Controller
 
         return view('member.langganan.create', compact(
             'daftarLapangan', 'lapangan', 'slots', 'bulanOptions', 'layananTambahan',
-            'hari', 'bulan', 'tanggalPreview', 'previewPerSlot',
+            'hari', 'bulan', 'tanggalPreview', 'previewPerSlot', 'hariSudahLewat', 'hariLewatPerBulan',
         ));
     }
 
@@ -83,29 +92,56 @@ class LanggananController extends Controller
         return redirect()->route('member.langganan.show', $paket);
     }
 
-    public function show(Request $request, PaketLangganan $paket, PaymentService $paymentService): View
+    public function show(Request $request, PaketLangganan $paket): View
     {
         abort_unless($paket->member_id === $request->user()->member->id, 403);
 
-        $snapToken = null;
+        $opsiBayar = [];
 
         if ($paket->status === 'pending_payment') {
-            $result = $paymentService->getOrCreateSnapTransaction(
-                $paket,
-                (float) $paket->total_harga,
-                'SUB',
-                [
-                    'first_name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'phone' => $request->user()->phone,
-                ],
-            );
+            $opsiBayar[] = ['jenis' => 'dp', 'label' => 'Bayar DP (25%)', 'jumlah' => $paket->dpMinimum()];
+        } elseif ($paket->status === 'active' && $paket->sisaTagihan() > 0) {
+            $jumlahCicilan = min($paket->dpMinimum(), $paket->sisaTagihan());
+            $opsiBayar[] = ['jenis' => 'cicilan', 'label' => 'Bayar Cicilan 25%', 'jumlah' => $jumlahCicilan];
 
-            $snapToken = $result['snap_token'];
+            if ($paket->sisaTagihan() > $jumlahCicilan) {
+                $opsiBayar[] = ['jenis' => 'lunas', 'label' => 'Lunasi Sekarang', 'jumlah' => $paket->sisaTagihan()];
+            }
         }
 
-        $tanggalPertemuan = $paket->pemesanan()->orderBy('tanggal_main')->get();
+        $paket->load(['pemesanan' => fn ($q) => $q->with('layananTambahan')->orderBy('tanggal_main')]);
+        $tanggalPertemuan = $paket->pemesanan;
 
-        return view('member.langganan.show', compact('paket', 'snapToken', 'tanggalPertemuan'));
+        return view('member.langganan.show', compact('paket', 'opsiBayar', 'tanggalPertemuan'));
+    }
+
+    /**
+     * Baris `pembayaran` (dan Snap token) baru dibuat di sini — dipanggil lewat fetch()
+     * hanya saat tombol bayar benar-benar diklik, bukan saat halaman status di-load.
+     */
+    public function opsiBayar(Request $request, PaketLangganan $paket, PaymentService $paymentService)
+    {
+        abort_unless($paket->member_id === $request->user()->member->id, 403);
+
+        $customerDetails = [
+            'first_name' => $request->user()->name,
+            'email' => $request->user()->email,
+            'phone' => $request->user()->phone,
+        ];
+
+        $jenis = $request->input('jenis');
+
+        $jumlah = match (true) {
+            $jenis === 'dp' && $paket->status === 'pending_payment' => $paket->dpMinimum(),
+            $jenis === 'cicilan' && $paket->status === 'active' => min($paket->dpMinimum(), $paket->sisaTagihan()),
+            $jenis === 'lunas' && $paket->status === 'active' => $paket->sisaTagihan(),
+            default => null,
+        };
+
+        abort_if($jumlah === null || $jumlah <= 0, 422);
+
+        $result = $paymentService->getOrCreateSnapTransaction($paket, $jumlah, 'SUB', $customerDetails);
+
+        return response()->json(['snap_token' => $result['snap_token']]);
     }
 }

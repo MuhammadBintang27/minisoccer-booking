@@ -58,6 +58,10 @@ class BookingService
         $harga = $sorted->sum(fn ($slot) => $slot->hargaUntukTanggal($tanggal, $extra['sumber']));
         $jumlahJam = $sorted->count();
 
+        if ($tanggal->isToday() && $jamMulai <= now()->format('H:i:s')) {
+            throw new SlotTidakTersediaException('Slot jam ini sudah lewat untuk hari ini. Silakan pilih jam lain.');
+        }
+
         return DB::transaction(function () use ($lapangan, $tanggal, $jamMulai, $jamSelesai, $harga, $jumlahJam, $addonIds, $extra) {
             Lapangan::where('id', $lapangan->id)->lockForUpdate()->first();
 

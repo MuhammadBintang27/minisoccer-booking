@@ -39,7 +39,7 @@
                                         'bg-green-100 text-green-700' => in_array($pemesanan->status, ['confirmed', 'completed']),
                                         'bg-slate-200 text-slate-600' => in_array($pemesanan->status, ['expired', 'cancelled']),
                                     ])>
-                                        {{ ucfirst($pemesanan->status) }}
+                                        {{ \App\Support\StatusLabel::label($pemesanan->status) }}
                                     </span>
                                 </div>
                             </a>

@@ -18,7 +18,7 @@
 
             <div class="min-w-[140px]">
                 <label class="block text-xs font-medium text-slate-700">Hari</label>
-                <select name="hari" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <select name="hari" id="pilih-hari" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                     <option value="">-- Pilih --</option>
                     @foreach (['1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu', '7' => 'Minggu'] as $value => $label)
                         <option value="{{ $value }}" {{ $hari === (int) $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -28,7 +28,7 @@
 
             <div class="min-w-[160px]">
                 <label class="block text-xs font-medium text-slate-700">Bulan</label>
-                <select name="bulan" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <select name="bulan" id="pilih-bulan" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                     @foreach ($bulanOptions as $opsi)
                         <option value="{{ $opsi->format('Y-m') }}" {{ $bulan->isSameMonth($opsi) ? 'selected' : '' }}>{{ $opsi->translatedFormat('F Y') }}</option>
                     @endforeach
@@ -40,6 +40,34 @@
             </button>
         </form>
 
+        <script>
+            (function () {
+                var bulanSelect = document.getElementById('pilih-bulan');
+                var hariSelect = document.getElementById('pilih-hari');
+                var hariLewatPerBulan = @json($hariLewatPerBulan);
+
+                function perbaruiOpsiHari() {
+                    var lewatList = hariLewatPerBulan[bulanSelect.value] || [];
+
+                    Array.from(hariSelect.options).forEach(function (opt) {
+                        if (!opt.value) return;
+
+                        var lewat = lewatList.indexOf(parseInt(opt.value, 10)) !== -1;
+                        opt.disabled = lewat;
+                        opt.textContent = opt.textContent.replace(' (sudah lewat)', '') + (lewat ? ' (sudah lewat)' : '');
+                    });
+
+                    var terpilih = hariSelect.options[hariSelect.selectedIndex];
+                    if (terpilih && terpilih.disabled) {
+                        hariSelect.value = '';
+                    }
+                }
+
+                bulanSelect.addEventListener('change', perbaruiOpsiHari);
+                perbaruiOpsiHari();
+            })();
+        </script>
+
         @if ($errors->any())
             <div class="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
                 @foreach ($errors->all() as $error)
@@ -48,7 +76,11 @@
             </div>
         @endif
 
-        @if ($lapangan && $hari)
+        @if ($hariSudahLewat)
+            <div class="mt-4 rounded-lg bg-yellow-50 px-4 py-3 text-sm text-yellow-700">
+                Hari ini sudah lewat minggu ini untuk bulan berjalan. Silakan pilih bulan depan untuk hari ini.
+            </div>
+        @elseif ($lapangan && $hari)
             <form method="POST" action="{{ route('member.langganan.store') }}" class="mt-4 space-y-4 rounded-xl bg-white p-4 shadow-sm">
                 @csrf
                 <input type="hidden" name="lapangan_id" value="{{ $lapangan->id }}">
@@ -63,9 +95,14 @@
 
                     <div class="mt-2 space-y-2">
                         @foreach ($slots as $slot)
-                            <label class="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 p-2 text-xs has-[:checked]:border-gold has-[:checked]:bg-gold/10">
+                            @php $slotTersedia = $previewPerSlot[$slot->id]->every(fn ($status) => $status === 'tersedia'); @endphp
+                            <label @class([
+                                'flex items-center justify-between rounded-lg border border-slate-200 p-2 text-xs has-[:checked]:border-gold has-[:checked]:bg-gold/10',
+                                'cursor-pointer' => $slotTersedia,
+                                'cursor-not-allowed opacity-50' => ! $slotTersedia,
+                            ])>
                                 <span class="flex items-center gap-3">
-                                    <input type="checkbox" name="jadwal_id[]" value="{{ $slot->id }}" class="rounded border-slate-300">
+                                    <input type="checkbox" name="jadwal_id[]" value="{{ $slot->id }}" class="rounded border-slate-300" {{ $slotTersedia ? '' : 'disabled' }}>
                                     <span>
                                         <span class="font-semibold text-slate-800">{{ substr($slot->jam_mulai, 0, 5) }}-{{ substr($slot->jam_selesai, 0, 5) }}</span>
                                         <span class="ml-1 text-slate-500">
@@ -79,7 +116,7 @@
                                             'flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold',
                                             'bg-green-100 text-green-700' => $status === 'tersedia',
                                             'bg-red-100 text-red-600' => $status === 'booked',
-                                            'bg-slate-200 text-slate-500' => $status === 'closed',
+                                            'bg-slate-200 text-slate-500' => in_array($status, ['closed', 'lewat']),
                                         ])>
                                             {{ $status === 'tersedia' ? '✓' : '✕' }}
                                         </span>
@@ -88,7 +125,7 @@
                             </label>
                         @endforeach
                     </div>
-                    <p class="mt-1 text-xs text-slate-400">Centang hijau (✓) = kosong di 4 tanggal itu, merah (✕) = sudah ada yang pakai/tutup di salah satu tanggal.</p>
+                    <p class="mt-1 text-xs text-slate-400">Centang hijau (✓) = kosong di 4 tanggal itu, merah (✕) = sudah ada yang pakai/tutup/lewat jamnya di salah satu tanggal.</p>
                 </div>
 
                 @if ($layananTambahan->isNotEmpty())

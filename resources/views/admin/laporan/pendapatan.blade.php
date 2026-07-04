@@ -1,10 +1,9 @@
 <x-layouts.admin title="Laporan Pendapatan">
-    <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-slate-800">Laporan Pendapatan</h2>
+    <x-slot:actions>
         <a href="{{ route('admin.laporan.pendapatan.export', request()->query()) }}" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
             Export CSV
         </a>
-    </div>
+    </x-slot:actions>
 
     <form method="GET" action="{{ route('admin.laporan.pendapatan') }}" class="mt-4 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm">
         <div>
@@ -20,7 +19,7 @@
         </button>
     </form>
 
-    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         <div class="rounded-xl bg-white p-4 shadow-sm">
             <div class="text-xs text-slate-500">Total Pendapatan</div>
             <div class="mt-1 text-lg font-bold text-slate-800">Rp{{ number_format($ringkasan['total'], 0, ',', '.') }}</div>
@@ -32,6 +31,14 @@
         <div class="rounded-xl bg-white p-4 shadow-sm">
             <div class="text-xs text-slate-500">Dari Non-Member</div>
             <div class="mt-1 text-lg font-bold text-slate-800">Rp{{ number_format($ringkasan['guest'], 0, ',', '.') }}</div>
+        </div>
+        <div class="rounded-xl bg-white p-4 shadow-sm">
+            <div class="text-xs text-slate-500">Via Midtrans</div>
+            <div class="mt-1 text-lg font-bold text-slate-800">Rp{{ number_format($ringkasan['midtrans'], 0, ',', '.') }}</div>
+        </div>
+        <div class="rounded-xl bg-white p-4 shadow-sm">
+            <div class="text-xs text-slate-500">Via Cash</div>
+            <div class="mt-1 text-lg font-bold text-slate-800">Rp{{ number_format($ringkasan['cash'], 0, ',', '.') }}</div>
         </div>
         <div class="rounded-xl bg-white p-4 shadow-sm">
             <div class="text-xs text-slate-500">Jumlah Transaksi</div>
@@ -60,7 +67,7 @@
                                 {{ $item->payable_type === \App\Models\PaketLangganan::class ? 'Member' : 'Guest' }}
                             </span>
                         </td>
-                        <td class="px-4 py-3 text-slate-600">{{ $item->metode_pembayaran ?? '-' }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ $item->channel === 'cash' ? 'Cash' : ($item->metode_pembayaran ?? 'Online') }}</td>
                         <td class="px-4 py-3 font-medium text-slate-800">Rp{{ number_format($item->jumlah, 0, ',', '.') }}</td>
                     </tr>
                 @empty
