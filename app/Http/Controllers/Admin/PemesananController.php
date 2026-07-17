@@ -7,7 +7,6 @@ use App\Models\Lapangan;
 use App\Models\PaketLangganan;
 use App\Models\Pemesanan;
 use App\Services\PaymentService;
-use App\Support\StatusLabel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -64,12 +63,6 @@ class PemesananController extends Controller
 
         $namaHari = ['1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu', '7' => 'Minggu'];
 
-        $statusBadge = fn (string $status) => match (true) {
-            in_array($status, ['pending', 'pending_payment']) => 'bg-yellow-100 text-yellow-700',
-            in_array($status, ['confirmed', 'completed', 'active']) => 'bg-green-100 text-green-700',
-            default => 'bg-slate-200 text-slate-600',
-        };
-
         $baris = collect();
 
         foreach ($guestQuery->get() as $item) {
@@ -81,8 +74,7 @@ class PemesananController extends Controller
                 'lapangan' => $item->lapangan->nama,
                 'sumber_label' => 'Guest',
                 'nama' => $item->nama_tamu,
-                'status_label' => StatusLabel::label($item->status),
-                'status_class' => $statusBadge($item->status),
+                'status' => $item->status,
                 'status_bayar' => ucfirst($item->statusPembayaran()),
                 'addons' => $item->layananTambahan,
                 'aksi_url' => route('admin.pemesanan.show', $item),
@@ -101,8 +93,7 @@ class PemesananController extends Controller
                 'lapangan' => $paket->lapangan->nama,
                 'sumber_label' => 'Member',
                 'nama' => $paket->member?->user?->name,
-                'status_label' => StatusLabel::label($paket->status),
-                'status_class' => $statusBadge($paket->status),
+                'status' => $paket->status,
                 'status_bayar' => ucfirst($paket->statusPembayaran()),
                 'addons' => $addons,
                 'aksi_url' => route('admin.langganan.show', $paket),

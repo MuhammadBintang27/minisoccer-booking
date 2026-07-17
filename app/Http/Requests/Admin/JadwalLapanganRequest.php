@@ -17,13 +17,26 @@ class JadwalLapanganRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * Jam selesai boleh diisi "24:00" untuk mewakili tengah malam (slot terakhir yang berakhir
+     * persis di pergantian hari, misal 23:00-24:00) — MySQL TIME menerima nilai itu dan
+     * perbandingannya tetap benar (24:00 > 23:00), tapi format H:i PHP cuma menerima jam 00-23,
+     * jadi dipakai regex sendiri di sini alih-alih date_format/after bawaan.
+     *
      * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-            'jam_mulai' => ['required', 'date_format:H:i'],
-            'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
+            'jam_mulai' => ['required', 'regex:/^([01][0-9]|2[0-3]):[0-5][0-9]$/'],
+            'jam_selesai' => [
+                'required',
+                'regex:/^([01][0-9]|2[0-3]):[0-5][0-9]$|^24:00$/',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    if ($this->filled('jam_mulai') && $value <= $this->input('jam_mulai')) {
+                        $fail('Jam selesai harus setelah jam mulai (isi 24:00 untuk tengah malam).');
+                    }
+                },
+            ],
             'harga_weekday_member' => ['required', 'numeric', 'min:0'],
             'harga_weekend_member' => ['required', 'numeric', 'min:0'],
             'harga_weekday_nonmember' => ['required', 'numeric', 'min:0'],

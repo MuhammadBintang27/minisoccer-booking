@@ -10,24 +10,24 @@
     <div>
         <label for="nama" class="block text-sm font-medium text-slate-700">Nama Lapangan</label>
         <input id="nama" type="text" name="nama" value="{{ old('nama', $lapangan->nama ?? '') }}" required
-            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none">
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
     </div>
 
     <div>
         <label for="deskripsi" class="block text-sm font-medium text-slate-700">Deskripsi</label>
         <textarea id="deskripsi" name="deskripsi" rows="3"
-            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none">{{ old('deskripsi', $lapangan->deskripsi ?? '') }}</textarea>
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">{{ old('deskripsi', $lapangan->deskripsi ?? '') }}</textarea>
     </div>
 
     <label class="flex items-center gap-2 text-sm text-slate-700">
-        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $lapangan->is_active ?? true) ? 'checked' : '' }} class="rounded border-slate-300">
+        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $lapangan->is_active ?? true) ? 'checked' : '' }} class="rounded border-slate-300 text-navy focus:ring-navy/30">
         Aktif (bisa dipesan)
     </label>
 </div>
 
-<div class="mt-6 flex items-center gap-3">
+<div class="mt-6 flex items-center gap-3 border-t border-slate-100 pt-4">
     <button type="submit" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
         Simpan
     </button>
-    <a href="{{ route('admin.lapangan.index') }}" class="text-sm text-slate-600 hover:underline">Batal</a>
+    <a href="{{ route('admin.lapangan.index') }}" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
 </div>

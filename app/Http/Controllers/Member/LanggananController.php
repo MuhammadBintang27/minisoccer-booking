@@ -34,19 +34,10 @@ class LanggananController extends Controller
         $hari = $request->query('hari') ? (int) $request->query('hari') : null;
         $bulan = $request->query('bulan') ? Carbon::parse($request->query('bulan').'-01') : Carbon::today()->startOfMonth();
 
-        $hariLewatPerBulan = $bulanOptions->mapWithKeys(function (Carbon $opsiBulan) use ($subscriptionService) {
-            $lewat = collect(range(1, 7))->filter(
-                fn (int $h) => $subscriptionService->hariSudahLewatUntukBulan($h, $opsiBulan)
-            )->values();
-
-            return [$opsiBulan->format('Y-m') => $lewat];
-        });
-
         $tanggalPreview = collect();
         $previewPerSlot = [];
-        $hariSudahLewat = $hari && $subscriptionService->hariSudahLewatUntukBulan($hari, $bulan);
 
-        if ($lapangan && $hari && ! $hariSudahLewat) {
+        if ($lapangan && $hari) {
             $tanggalPreview = collect($subscriptionService->computeOccurrenceDates($hari, $bulan));
 
             $statusPerTanggal = $tanggalPreview->map(
@@ -61,7 +52,7 @@ class LanggananController extends Controller
 
         return view('member.langganan.create', compact(
             'daftarLapangan', 'lapangan', 'slots', 'bulanOptions', 'layananTambahan',
-            'hari', 'bulan', 'tanggalPreview', 'previewPerSlot', 'hariSudahLewat', 'hariLewatPerBulan',
+            'hari', 'bulan', 'tanggalPreview', 'previewPerSlot',
         ));
     }
 

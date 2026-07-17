@@ -1,59 +1,94 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Soccer Bumi Teuku Umar — Sistem Booking Lapangan Futsal Online
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi booking lapangan futsal berbasis Laravel untuk **Soccer Bumi Teuku Umar**. Mendukung booking sekali main untuk pengunjung umum (guest) maupun paket langganan bulanan untuk member terdaftar, lengkap dengan pembayaran online (Midtrans), pembayaran tunai di tempat, dan panel admin untuk mengelola semuanya.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Multi-lapangan** — tiap lapangan punya jadwal, harga, dan status buka/tutup sendiri.
+- **Tiga aktor**: Admin (kelola semuanya), Member (booking paket bulanan berulang), Guest (booking sekali main tanpa akun, cukup nama + no. HP).
+- **Booking multi-jam** — pilih beberapa slot jam berurutan sekaligus dalam satu pemesanan.
+- **Paket bulanan member** — pilih hari + jam + bulan, sistem otomatis membuatkan tepat 4 kali pertemuan mingguan berturut-turut.
+- **Harga dinamis**: weekday/weekend dan member/non-member (4 tingkat harga per slot).
+- **Layanan tambahan** (add-on) yang dihitung per jam main, dikelola bebas oleh admin (CRUD).
+- **Pembayaran DP 25%** — booking terkonfirmasi begitu DP minimal terbayar, sisanya bisa dilunasi (guest) atau dicicil bertahap (member) kapan saja, online lewat Midtrans Snap maupun tunai langsung di lapangan (dikonfirmasi manual oleh admin lewat panel kasir).
+- **Anti-double-booking**: row locking di level lapangan + pengecekan overlap rentang jam, aman untuk booking konkuren.
+- **Notifikasi email** ke member saat paket aktif, saat paket kedaluwarsa, dan setiap ada pembayaran (cicilan/pelunasan) yang diterima.
+- **Laporan pendapatan** admin (dipecah member/guest, online/cash) dengan export CSV.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel 12, PHP 8.2
+- MySQL/MariaDB
+- Autentikasi manual (tanpa Breeze/Jetstream) — role `admin`/`member` lewat middleware
+- Midtrans Snap (payment gateway)
+- Tailwind CSS v4
+- Queue driver `database` (dipakai untuk webhook Midtrans & notifikasi email)
 
-## Learning Laravel
+## Instalasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer install
+npm install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+cp .env.example .env
+php artisan key:generate
+```
 
-## Laravel Sponsors
+Atur koneksi database, kredensial Midtrans sandbox, dan konfigurasi SMTP di `.env`:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```env
+DB_DATABASE=mysoc
+DB_USERNAME=root
+DB_PASSWORD=
 
-### Premium Partners
+MIDTRANS_SERVER_KEY=Mid-server-xxxxxxxxxxxxxxxx
+MIDTRANS_CLIENT_KEY=Mid-client-xxxxxxxxxxxxxxxx
+MIDTRANS_IS_PRODUCTION=false
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=email-pengirim@gmail.com
+MAIL_PASSWORD="app password 16 karakter"
+```
 
-## Contributing
+Lalu siapkan database:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan migrate --seed
+npm run build
+```
 
-## Code of Conduct
+Seeder membuatkan akun admin default:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Email | Password |
+|---|---|
+| `admin@mysoc.test` | `password` |
 
-## Security Vulnerabilities
+## Menjalankan Secara Lokal
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Butuh 3 proses berjalan bersamaan untuk fungsionalitas penuh:
 
-## License
+```bash
+php artisan serve            # web server
+php artisan queue:work       # proses webhook Midtrans & kirim email notifikasi
+php artisan schedule:work    # pelepasan otomatis slot yang DP-nya tidak kunjung dibayar (>15 menit)
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> Kalau `.env` diubah (misalnya kredensial SMTP), **restart `queue:work`** — proses ini membaca config sekali saat start, tidak otomatis baca ulang `.env` selama berjalan.
+
+Untuk tes pembayaran Midtrans dari localhost, webhook butuh URL publik — pakai [ngrok](https://ngrok.com) (`ngrok http 8000`) lalu daftarkan `https://<subdomain-ngrok>.ngrok.io/webhooks/midtrans` sebagai Payment Notification URL di dashboard Midtrans Sandbox.
+
+## Struktur Penting
+
+- `app/Services/` — logic bisnis inti: `BookingService`, `SubscriptionService`, `AvailabilityService`, `PaymentService`, `ReportService`. Controller & model sengaja tetap tipis.
+- `app/Jobs/ProcessMidtransNotification.php` — pemrosesan webhook Midtrans secara idempotent lewat queue.
+- `app/Notifications/` — email ke member (paket aktif, paket kedaluwarsa, pembayaran diterima).
+- `app/Support/StatusLabel.php` — terjemahan semua status (booking/paket/pembayaran) ke Bahasa Indonesia untuk ditampilkan di UI.
+- `resources/views/components/layouts/` — `site.blade.php` (guest+member, navbar) dan `admin.blade.php` (sidebar admin).
+
+## Testing
+
+```bash
+php artisan test
+```

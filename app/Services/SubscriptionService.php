@@ -20,8 +20,7 @@ class SubscriptionService
 
     /**
      * Tanggal kemunculan pertama suatu hari pada/sesudah awal bulan yang dipilih (belum digeser
-     * ke minggu berikutnya walau sudah lewat hari ini — dipakai untuk hitung apakah kemunculan
-     * pertama itu sudah lewat, bukan untuk hasil akhir tanggal pertemuan).
+     * ke minggu berikutnya walau sudah lewat hari ini).
      */
     private function kemunculanPertama(int $hariIso, Carbon $bulan): Carbon
     {
@@ -31,15 +30,6 @@ class SubscriptionService
         }
 
         return $cursor;
-    }
-
-    /**
-     * True kalau kemunculan pertama hari tersebut di bulan yang dipilih sudah lewat dari hari ini
-     * — jadi member harus pindah ke bulan depan supaya paket tidak "meloncat" minggu di tengah bulan ini.
-     */
-    public function hariSudahLewatUntukBulan(int $hariIso, Carbon $bulan): bool
-    {
-        return $this->kemunculanPertama($hariIso, $bulan)->lt(Carbon::today());
     }
 
     /**

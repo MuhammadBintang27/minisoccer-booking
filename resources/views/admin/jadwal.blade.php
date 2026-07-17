@@ -7,10 +7,10 @@
         </x-slot:actions>
     @endif
 
-    <form method="GET" action="{{ route('admin.jadwal.index') }}" class="mt-4 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm">
+    <form method="GET" action="{{ route('admin.jadwal.index') }}" class="mt-4 flex flex-wrap items-end gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div class="flex-1 min-w-[200px]">
-            <label class="block text-xs font-medium text-slate-700">Pilih Lapangan</label>
-            <select name="lapangan_id" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Pilih Lapangan</label>
+            <select name="lapangan_id" class="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
                 @foreach ($daftarLapangan as $item)
                     <option value="{{ $item->id }}" {{ $lapangan && $lapangan->id === $item->id ? 'selected' : '' }}>
                         {{ $item->nama }} {{ $item->is_active ? '' : '(nonaktif)' }}
@@ -26,7 +26,7 @@
     @if (! $lapangan)
         <p class="mt-8 text-slate-500">Belum ada data lapangan.</p>
     @else
-        <div class="mt-6 rounded-xl bg-white p-4 shadow-sm">
+        <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <div class="flex items-center justify-between">
                 <a href="{{ route('admin.jadwal.index', ['lapangan_id' => $lapangan->id, 'bulan' => $bulan->copy()->subMonth()->format('Y-m')]) }}"
                     class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50">
@@ -95,9 +95,9 @@
         </div>
 
         @if ($tanggal)
-            <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4">
-                <div class="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-xl">
-                    <div class="flex items-center justify-between">
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm">
+                <div class="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-xl ring-1 ring-slate-900/5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <h2 class="text-sm font-semibold text-slate-800">
                             Slot {{ $tanggal->translatedFormat('l, d F Y') }}
                         </h2>

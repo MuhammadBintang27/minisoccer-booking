@@ -1,5 +1,5 @@
 <x-layouts.admin title="Edit Member">
-    <div class="max-w-xl rounded-xl bg-white p-6 shadow-sm">
+    <div class="max-w-xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-slate-800">Edit Member ({{ $member->kode_member }})</h2>
 
         @if ($errors->any())
@@ -17,34 +17,34 @@
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700">Nama</label>
                 <input id="name" type="text" name="name" value="{{ old('name', $member->user->name) }}" required
-                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none">
+                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
             </div>
 
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700">Email</label>
                 <input id="email" type="email" name="email" value="{{ old('email', $member->user->email) }}" required
-                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none">
+                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
             </div>
 
             <div>
                 <label for="phone" class="block text-sm font-medium text-slate-700">No. HP</label>
                 <input id="phone" type="text" name="phone" value="{{ old('phone', $member->user->phone) }}" required
-                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none">
+                    class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
             </div>
 
             <div>
                 <label for="status" class="block text-sm font-medium text-slate-700">Status</label>
-                <select id="status" name="status" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
-                    <option value="active" {{ old('status', $member->status) === 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="inactive" {{ old('status', $member->status) === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                <select id="status" name="status" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+                    <option value="active" {{ old('status', $member->status) === 'active' ? 'selected' : '' }}>Aktif</option>
+                    <option value="inactive" {{ old('status', $member->status) === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
                 </select>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 border-t border-slate-100 pt-4">
                 <button type="submit" class="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
                     Simpan
                 </button>
-                <a href="{{ route('admin.member.index') }}" class="text-sm text-slate-600 hover:underline">Batal</a>
+                <a href="{{ route('admin.member.index') }}" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
             </div>
         </form>
     </div>

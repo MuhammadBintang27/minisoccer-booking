@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests\Member;
 
-use App\Services\SubscriptionService;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Validator;
 
 class LanggananRequest extends FormRequest
 {
@@ -33,21 +30,5 @@ class LanggananRequest extends FormRequest
             'layanan_tambahan_id' => ['sometimes', 'array'],
             'layanan_tambahan_id.*' => ['exists:layanan_tambahan,id'],
         ];
-    }
-
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function (Validator $validator) {
-            if (! $this->filled('hari') || ! $this->filled('bulan')) {
-                return;
-            }
-
-            $bulan = Carbon::parse($this->input('bulan').'-01');
-            $hari = (int) $this->input('hari');
-
-            if (app(SubscriptionService::class)->hariSudahLewatUntukBulan($hari, $bulan)) {
-                $validator->errors()->add('hari', 'Hari ini sudah lewat untuk bulan berjalan. Silakan pilih bulan depan.');
-            }
-        });
     }
 }

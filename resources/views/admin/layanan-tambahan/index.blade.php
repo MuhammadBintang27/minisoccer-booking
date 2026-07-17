@@ -11,27 +11,28 @@
         </div>
     @endif
 
-    <div class="mt-6 overflow-x-auto rounded-xl bg-white shadow-sm">
+    <div class="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table class="w-full text-left text-sm">
-            <thead class="bg-slate-50 text-slate-500">
+            <thead class="bg-slate-50">
                 <tr>
-                    <th class="px-6 py-3 font-medium">Nama</th>
-                    <th class="px-6 py-3 font-medium">Harga</th>
-                    <th class="px-6 py-3 font-medium">Status</th>
-                    <th class="px-6 py-3 font-medium">Aksi</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Nama</th>
+                    <th class="px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500">Harga</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Status</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse ($layanan as $item)
-                    <tr>
-                        <td class="px-6 py-4 font-medium text-slate-800">{{ $item->nama }}</td>
-                        <td class="px-6 py-4 text-slate-600">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4">
-                            <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $item->is_active ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600' }}">
+                    <tr class="transition-colors hover:bg-slate-50">
+                        <td class="px-4 py-3.5 font-medium text-slate-800">{{ $item->nama }}</td>
+                        <td class="px-4 py-3.5 text-right tabular-nums text-slate-600">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
+                        <td class="px-4 py-3.5">
+                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold {{ $item->is_active ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600' }}">
+                                <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
                                 {{ $item->is_active ? 'Aktif' : 'Nonaktif' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-3.5">
                             <div class="flex items-center gap-3">
                                 <a href="{{ route('admin.layanan-tambahan.edit', $item) }}" class="text-xs font-semibold text-navy hover:underline">Edit</a>
                                 <form method="POST" action="{{ route('admin.layanan-tambahan.destroy', $item) }}" onsubmit="return confirm('Hapus layanan {{ $item->nama }}?');">
@@ -43,9 +44,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-8 text-center text-slate-500">Belum ada layanan tambahan.</td>
-                    </tr>
+                    <x-table-empty :colspan="4">Belum ada layanan tambahan.</x-table-empty>
                 @endforelse
             </tbody>
         </table>

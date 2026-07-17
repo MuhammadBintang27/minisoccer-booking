@@ -19,6 +19,7 @@
                 <a href="{{ route('home') }}" class="hover:text-gold">Beranda</a>
                 <a href="{{ route('home') }}#jadwal" class="hover:text-gold">Jadwal</a>
                 <a href="{{ route('home') }}#tentang-kami" class="hover:text-gold">Tentang Kami</a>
+                <a href="{{ route('home') }}#faq" class="hover:text-gold">FAQ</a>
 
                 @guest
                     <a href="{{ route('guest.pemesanan.cek') }}" class="hover:text-gold">Cek Booking</a>
@@ -78,6 +79,7 @@
                     <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2 hover:bg-white/10">Beranda</a>
                     <a href="{{ route('home') }}#jadwal" class="block rounded-lg px-3 py-2 hover:bg-white/10">Jadwal</a>
                     <a href="{{ route('home') }}#tentang-kami" class="block rounded-lg px-3 py-2 hover:bg-white/10">Tentang Kami</a>
+                    <a href="{{ route('home') }}#faq" class="block rounded-lg px-3 py-2 hover:bg-white/10">FAQ</a>
 
                     @guest
                         <a href="{{ route('guest.pemesanan.cek') }}" class="block rounded-lg px-3 py-2 hover:bg-white/10">Cek Booking</a>
