@@ -71,6 +71,18 @@ class Pemesanan extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Nama pemesan/tim: nama_tamu untuk guest, nama user untuk member.
+     */
+    public function namaPemesan(): string
+    {
+        if ($this->sumber === 'member') {
+            return $this->member?->user?->name ?? 'Member';
+        }
+
+        return $this->nama_tamu ?? 'Guest';
+    }
+
     public function totalHarga(): float
     {
         return (float) $this->harga + (float) $this->layananTambahan->sum('pivot.harga');

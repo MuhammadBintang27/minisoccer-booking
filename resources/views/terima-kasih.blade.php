@@ -1,4 +1,4 @@
-<x-layouts.site title="Terima Kasih - Soccer Bumi Teuku Umar">
+<x-layouts.site title="Terima Kasih - MYSOC Meulaboh">
     <section class="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 py-16 text-center md:px-6">
         <span class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
             &#10003;

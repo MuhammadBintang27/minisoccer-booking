@@ -86,24 +86,26 @@
 
             @if ($pemesanan->sisaTagihan() > 0)
                 <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-sm font-semibold text-slate-700">Tandai Lunas Cash</h3>
+                    <h3 class="text-sm font-semibold text-slate-700">Catat Pembayaran Cash</h3>
                     <form method="POST" action="{{ route('admin.pemesanan.bayar-cash', $pemesanan) }}" class="mt-3 space-y-2">
                         @csrf
-                        <input type="number" name="jumlah" step="1000" min="0" max="{{ $pemesanan->sisaTagihan() }}"
-                            value="{{ $pemesanan->sisaTagihan() }}" required
-                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+                        <label for="jumlah-cash" class="block text-xs font-medium text-slate-500">Jumlah Diterima (Rp)</label>
+                        <input id="jumlah-cash" type="text" inputmode="numeric" name="jumlah"
+                            value="{{ number_format($pemesanan->sisaTagihan(), 0, '', '') }}" required
+                            class="input-rupiah w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
                         <button type="submit" class="w-full rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white hover:bg-navy-dark">
-                            Tandai Lunas (Cash)
+                            Catat Pembayaran (Cash)
                         </button>
+                        <p class="text-[11px] text-slate-400">Maksimal Rp{{ number_format($pemesanan->sisaTagihan(), 0, ',', '.') }} (sisa tagihan). Kalau diisi penuh, otomatis lunas.</p>
                     </form>
                 </div>
 
                 <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                     <h3 class="text-sm font-semibold text-slate-700">Buatkan Pembayaran Online</h3>
                     <div class="mt-3 space-y-2">
-                        <input type="number" id="jumlah-online" step="1000" min="0" max="{{ $pemesanan->sisaTagihan() }}"
-                            value="{{ $pemesanan->sisaTagihan() }}"
-                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+                        <input type="text" inputmode="numeric" id="jumlah-online"
+                            value="{{ number_format($pemesanan->sisaTagihan(), 0, '', '') }}"
+                            class="input-rupiah w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
                         <button type="button" id="btn-kasir-bayar" class="w-full rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark disabled:opacity-50">
                             Buat &amp; Buka Pembayaran
                         </button>
@@ -114,7 +116,7 @@
                     <script>
                         document.getElementById('btn-kasir-bayar').addEventListener('click', function () {
                             var btn = this;
-                            var jumlah = document.getElementById('jumlah-online').value;
+                            var jumlah = document.getElementById('jumlah-online').value.replace(/\./g, '');
                             btn.disabled = true;
 
                             fetch(@json(route('admin.pemesanan.buat-transaksi-online', $pemesanan)), {

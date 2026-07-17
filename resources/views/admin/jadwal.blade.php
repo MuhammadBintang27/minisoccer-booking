@@ -119,6 +119,12 @@
                                 @elseif ($item['status'] === 'booked')
                                     <div class="mt-1 text-xs text-slate-600">Rp{{ number_format($slot->hargaUntukTanggal($tanggal, $item['sumber']), 0, ',', '.') }}</div>
                                     <div class="mt-1 text-xs font-semibold text-red-600">Terisi ({{ $item['sumber'] === 'member' ? 'Member' : 'Guest' }})</div>
+                                    <div class="mt-1 flex items-center gap-1 text-xs text-slate-600">
+                                        <svg class="h-3.5 w-3.5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                        </svg>
+                                        <span class="truncate" title="{{ $item['pemesanan']->namaPemesan() }}">{{ $item['pemesanan']->namaPemesan() }}</span>
+                                    </div>
                                 @elseif ($item['status'] === 'lewat')
                                     <div class="mt-1 text-xs font-semibold text-slate-500">Sudah Lewat</div>
                                 @else

@@ -11,8 +11,8 @@
 <body class="bg-slate-100 font-sans antialiased">
     <div class="flex min-h-screen">
         <aside class="sticky top-0 flex h-screen w-64 shrink-0 flex-col overflow-y-auto bg-navy text-white">
-            <div class="px-6 py-6 text-lg font-bold tracking-wide border-b border-white/10">
-                SOCCER <span class="block text-xs font-normal text-white/60">Bumi Teuku Umar</span>
+            <div class="px-6 py-6 border-b border-white/10">
+                <img src="{{ asset('images/logo.webp') }}" alt="MYSOC - My Soccer Bumi Teuku Umar" class="h-9 w-auto">
             </div>
 
             @php
@@ -63,5 +63,26 @@
             </main>
         </div>
     </div>
+
+    <script>
+        // Input rupiah: tampil dengan titik ribuan saat diketik, dikirim ke server sebagai angka polos.
+        (function () {
+            function formatRupiah(el) {
+                var digits = el.value.replace(/\D/g, '');
+                el.value = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+
+            document.querySelectorAll('.input-rupiah').forEach(function (el) {
+                formatRupiah(el);
+                el.addEventListener('input', function () { formatRupiah(el); });
+
+                if (el.form) {
+                    el.form.addEventListener('submit', function () {
+                        el.value = el.value.replace(/\./g, '');
+                    });
+                }
+            });
+        })();
+    </script>
 </body>
 </html>

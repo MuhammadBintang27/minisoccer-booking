@@ -1,8 +1,11 @@
-<x-layouts.site title="Status Paket Langganan">
+<x-layouts.site title="Status Paket Langganan - MYSOC Meulaboh">
     <section class="mx-auto max-w-md px-4 py-10 md:px-6">
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <div class="flex items-start justify-between gap-3">
-                <h1 class="text-lg font-semibold text-slate-800">Paket Bulanan</h1>
+        <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5">
+            <div class="flex items-center justify-between gap-3 bg-navy px-6 py-4 text-white">
+                <div>
+                    <h1 class="text-lg font-semibold">Paket Bulanan</h1>
+                    <p class="mt-0.5 text-xs text-white/60">MYSOC &middot; My Soccer Bumi Teuku Umar</p>
+                </div>
                 <span @class([
                     'shrink-0 rounded-full px-3 py-1 text-xs font-semibold',
                     'bg-yellow-100 text-yellow-700' => $paket->status === 'pending_payment',
@@ -13,10 +16,21 @@
                 </span>
             </div>
 
-            <div class="mt-4 space-y-1 text-sm text-slate-600">
+            <div class="p-6">
+            <div class="space-y-1.5 text-sm text-slate-600">
                 <div class="text-base font-semibold text-slate-800">{{ $paket->lapangan->nama }}</div>
-                <div>{{ $paket->jumlah_pertemuan }}x pertemuan, jam {{ substr($paket->jam_mulai, 0, 5) }} sampai {{ substr($paket->jam_selesai, 0, 5) }}</div>
-                <div>{{ $paket->periode_mulai->translatedFormat('d M Y') }} sampai {{ $paket->periode_selesai->translatedFormat('d M Y') }}</div>
+                <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    {{ $paket->jumlah_pertemuan }}x pertemuan, jam {{ substr($paket->jam_mulai, 0, 5) }} sampai {{ substr($paket->jam_selesai, 0, 5) }}
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                    {{ $paket->periode_mulai->translatedFormat('d M Y') }} sampai {{ $paket->periode_selesai->translatedFormat('d M Y') }}
+                </div>
             </div>
 
             <div class="mt-4 space-y-1 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">
@@ -58,7 +72,12 @@
                 </div>
             @endif
 
-            <div class="mt-4 rounded-lg border border-slate-100 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+            <div @class([
+                'mt-4 rounded-lg border p-3 text-xs leading-relaxed',
+                'border-yellow-200 bg-yellow-50 text-yellow-800' => $paket->status === 'pending_payment',
+                'border-green-200 bg-green-50 text-green-800' => $paket->status === 'active',
+                'border-slate-100 bg-slate-50 text-slate-600' => ! in_array($paket->status, ['pending_payment', 'active']),
+            ])>
                 @if ($paket->status === 'pending_payment')
                     Selesaikan DP minimal Rp{{ number_format($paket->dpMinimum(), 0, ',', '.') }} dalam 15 menit supaya semua jadwal di paket ini terkunci untuk Anda. Kalau tidak, seluruh slot otomatis dilepas kembali.
                 @elseif ($paket->status === 'active' && $paket->sisaTagihan() > 0)
@@ -126,6 +145,7 @@
                     });
                 </script>
             @endif
+            </div>
         </div>
     </section>
 </x-layouts.site>

@@ -2,7 +2,7 @@
     <form method="GET" action="{{ route('admin.pemesanan.index') }}" class="mt-4 flex flex-wrap items-end gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div>
             <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Lapangan</label>
-            <select name="lapangan_id" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+            <select name="lapangan_id" onchange="this.form.submit()" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
                 <option value="">Semua</option>
                 @foreach ($daftarLapangan as $item)
                     <option value="{{ $item->id }}" {{ request('lapangan_id') == $item->id ? 'selected' : '' }}>{{ $item->nama }}</option>
@@ -11,7 +11,7 @@
         </div>
         <div>
             <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Status</label>
-            <select name="status" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+            <select name="status" onchange="this.form.submit()" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
                 <option value="">Semua</option>
                 @foreach (['pending', 'confirmed', 'expired', 'cancelled', 'completed'] as $status)
                     <option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>{{ \App\Support\StatusLabel::label($status) }}</option>
@@ -19,13 +19,24 @@
             </select>
         </div>
         <div>
-            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Tanggal</label>
-            <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Hari</label>
+            <select name="hari" onchange="this.form.submit()" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+                <option value="">Semua</option>
+                @foreach (['1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu', '7' => 'Minggu'] as $value => $label)
+                    <option value="{{ $value }}" {{ request('hari') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
         </div>
-        <button type="submit" class="rounded-lg bg-gold px-5 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-dark">
-            Filter
-        </button>
-        <a href="{{ route('admin.pemesanan.index') }}" class="text-sm text-slate-500 hover:underline">Reset</a>
+        <div>
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Tanggal</label>
+            <input type="date" name="tanggal" value="{{ request('tanggal') }}" onchange="this.form.submit()" class="mt-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+        </div>
+        <div class="min-w-[180px] flex-1">
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Cari Nama</label>
+            <input id="cari-nama" type="text" name="cari" value="{{ request('cari') }}" placeholder="Ketik untuk saring, Enter untuk cari..."
+                class="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+        </div>
+        <a href="{{ route('admin.pemesanan.index') }}" class="pb-2 text-sm text-slate-500 hover:underline">Reset</a>
     </form>
 
     <div class="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -43,7 +54,7 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse ($pemesanan as $item)
-                    <tr class="transition-colors hover:bg-slate-50">
+                    <tr class="transition-colors hover:bg-slate-50" data-nama="{{ strtolower($item['nama'] ?? '') }}">
                         <td class="px-4 py-3.5 text-slate-700">
                             <div class="font-medium text-slate-800">{{ $item['tanggal_label'] }}</div>
                             <div class="text-xs text-slate-400">{{ $item['jam_label'] }}</div>
@@ -85,4 +96,14 @@
     <div class="mt-4">
         {{ $pemesanan->links() }}
     </div>
+
+    <script>
+        // Ketik = saring baris yang sedang tampil saja; Enter = submit form (cari ke server, semua halaman).
+        document.getElementById('cari-nama').addEventListener('input', function () {
+            var q = this.value.trim().toLowerCase();
+            document.querySelectorAll('tbody tr[data-nama]').forEach(function (tr) {
+                tr.style.display = tr.dataset.nama.indexOf(q) !== -1 ? '' : 'none';
+            });
+        });
+    </script>
 </x-layouts.admin>

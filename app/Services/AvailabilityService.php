@@ -19,13 +19,14 @@ class AvailabilityService
      * lewat) maupun tanggal hari ini (hanya slot yang jam mulainya sudah lewat jam sekarang) — supaya
      * slot kosong di tanggal yang sudah berlalu tidak dianggap "tersedia" lagi.
      *
-     * @return Collection<int, array{slot: \App\Models\JadwalLapangan, status: string, sumber: string|null}>
+     * @return Collection<int, array{slot: \App\Models\JadwalLapangan, status: string, sumber: string|null, pemesanan: \App\Models\Pemesanan|null}>
      */
     public function getSlotsForDate(Lapangan $lapangan, Carbon $date): Collection
     {
         $pemesananAktif = $lapangan->pemesanan()
             ->whereDate('tanggal_main', $date)
             ->whereIn('status', ['pending', 'confirmed'])
+            ->with('member.user')
             ->get();
 
         $isPastDate = $date->lt(Carbon::today());
@@ -48,7 +49,7 @@ class AvailabilityService
                     default => 'tersedia',
                 };
 
-                return ['slot' => $slot, 'status' => $status, 'sumber' => $pemesanan?->sumber];
+                return ['slot' => $slot, 'status' => $status, 'sumber' => $pemesanan?->sumber, 'pemesanan' => $pemesanan];
             });
     }
 

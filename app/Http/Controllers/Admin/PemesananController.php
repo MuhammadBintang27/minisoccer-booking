@@ -23,6 +23,8 @@ class PemesananController extends Controller
         $lapanganId = $request->query('lapangan_id');
         $status = $request->query('status');
         $tanggal = $request->query('tanggal');
+        $cari = trim((string) $request->query('cari'));
+        $hari = (int) $request->query('hari') ?: null; // 1 (Senin) - 7 (Minggu)
 
         $statusPaketMap = [
             'pending' => 'pending_payment',
@@ -43,6 +45,9 @@ class PemesananController extends Controller
         if ($tanggal) {
             $guestQuery->whereDate('tanggal_main', $tanggal);
         }
+        if ($cari !== '') {
+            $guestQuery->where('nama_tamu', 'like', '%'.$cari.'%');
+        }
 
         $paketQuery = PaketLangganan::with(['lapangan', 'member.user', 'pembayaran', 'pemesanan.layananTambahan']);
 
@@ -60,12 +65,25 @@ class PemesananController extends Controller
         if ($tanggal) {
             $paketQuery->whereHas('pemesanan', fn ($q) => $q->whereDate('tanggal_main', $tanggal));
         }
+        if ($cari !== '') {
+            $paketQuery->whereHas('member.user', fn ($q) => $q->where('name', 'like', '%'.$cari.'%'));
+        }
+        if ($hari) {
+            $paketQuery->where('hari', $hari);
+        }
 
         $namaHari = ['1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu', '7' => 'Minggu'];
 
         $baris = collect();
 
-        foreach ($guestQuery->get() as $item) {
+        $daftarGuest = $guestQuery->get();
+
+        // Hari booking guest tidak tersimpan sebagai kolom, jadi difilter dari tanggal mainnya.
+        if ($hari) {
+            $daftarGuest = $daftarGuest->filter(fn ($item) => $item->tanggal_main->dayOfWeekIso === $hari);
+        }
+
+        foreach ($daftarGuest as $item) {
             $baris->push([
                 'tipe' => 'guest',
                 'sort_key' => $item->tanggal_main->format('Y-m-d').' '.$item->jam_mulai,

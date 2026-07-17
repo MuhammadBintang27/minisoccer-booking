@@ -1,4 +1,4 @@
-<x-layouts.site title="Login - Soccer Bumi Teuku Umar">
+<x-layouts.site title="Login - MYSOC Meulaboh">
     <section class="mx-auto max-w-md px-6 py-16">
         <div class="rounded-xl bg-white p-8 shadow-sm">
             <h1 class="text-xl font-bold text-slate-800">Login Member</h1>

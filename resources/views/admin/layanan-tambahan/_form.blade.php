@@ -15,8 +15,8 @@
 
     <div>
         <label for="harga" class="block text-sm font-medium text-slate-700">Harga (per jam main)</label>
-        <input id="harga" type="number" name="harga" step="1000" min="0" value="{{ old('harga', $layanan->harga ?? '') }}" required
-            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+        <input id="harga" type="text" inputmode="numeric" name="harga" value="{{ old('harga', isset($layanan) ? number_format($layanan->harga, 0, '', '') : '') }}" required
+            class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
     </div>
 
     <label class="flex items-center gap-2 text-sm text-slate-700">

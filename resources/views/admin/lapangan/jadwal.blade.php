@@ -68,20 +68,20 @@
                             <div class="text-xs font-semibold text-slate-500">Harga Member</div>
                             <div>
                                 <label class="text-xs text-slate-500">Weekday</label>
-                                <input type="number" name="harga_weekday_member" value="{{ $slot->harga_weekday_member }}" step="1000" min="0" required class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
+                                <input type="text" inputmode="numeric" name="harga_weekday_member" value="{{ number_format($slot->harga_weekday_member, 0, '', '') }}" required class="input-rupiah w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500">Weekend</label>
-                                <input type="number" name="harga_weekend_member" value="{{ $slot->harga_weekend_member }}" step="1000" min="0" required class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
+                                <input type="text" inputmode="numeric" name="harga_weekend_member" value="{{ number_format($slot->harga_weekend_member, 0, '', '') }}" required class="input-rupiah w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
                             </div>
                             <div class="text-xs font-semibold text-slate-500">Harga Non-Member</div>
                             <div>
                                 <label class="text-xs text-slate-500">Weekday</label>
-                                <input type="number" name="harga_weekday_nonmember" value="{{ $slot->harga_weekday_nonmember }}" step="1000" min="0" required class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
+                                <input type="text" inputmode="numeric" name="harga_weekday_nonmember" value="{{ number_format($slot->harga_weekday_nonmember, 0, '', '') }}" required class="input-rupiah w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500">Weekend</label>
-                                <input type="number" name="harga_weekend_nonmember" value="{{ $slot->harga_weekend_nonmember }}" step="1000" min="0" required class="w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
+                                <input type="text" inputmode="numeric" name="harga_weekend_nonmember" value="{{ number_format($slot->harga_weekend_nonmember, 0, '', '') }}" required class="input-rupiah w-full rounded-lg border border-slate-300 px-2 py-1 text-xs">
                             </div>
                             <label class="flex items-center gap-2 text-xs text-slate-600">
                                 <input type="checkbox" name="is_closed" value="1" {{ $slot->is_closed ? 'checked' : '' }} class="rounded border-slate-300">
@@ -122,22 +122,22 @@
             <div class="flex gap-3">
                 <div class="w-1/2">
                     <label class="block text-xs font-medium text-slate-700">Weekday</label>
-                    <input type="number" name="harga_weekday_member" step="1000" min="0" required placeholder="300000" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <input type="text" inputmode="numeric" name="harga_weekday_member" required placeholder="300000" class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-xs font-medium text-slate-700">Weekend</label>
-                    <input type="number" name="harga_weekend_member" step="1000" min="0" required placeholder="400000" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <input type="text" inputmode="numeric" name="harga_weekend_member" required placeholder="400000" class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                 </div>
             </div>
             <div class="text-xs font-semibold text-slate-500">Harga Non-Member</div>
             <div class="flex gap-3">
                 <div class="w-1/2">
                     <label class="block text-xs font-medium text-slate-700">Weekday</label>
-                    <input type="number" name="harga_weekday_nonmember" step="1000" min="0" required placeholder="350000" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <input type="text" inputmode="numeric" name="harga_weekday_nonmember" required placeholder="350000" class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-xs font-medium text-slate-700">Weekend</label>
-                    <input type="number" name="harga_weekend_nonmember" step="1000" min="0" required placeholder="450000" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <input type="text" inputmode="numeric" name="harga_weekend_nonmember" required placeholder="450000" class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                 </div>
             </div>
             <label class="flex items-center gap-2 text-sm text-slate-600">

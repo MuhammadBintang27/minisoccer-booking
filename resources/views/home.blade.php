@@ -1,18 +1,25 @@
-<x-layouts.site title="Soccer Bumi Teuku Umar - Booking Lapangan Futsal Online">
+<x-layouts.site title="MYSOC - Booking Lapangan Mini Soccer Meulaboh | My Soccer Bumi Teuku Umar">
     <section id="beranda" class="relative overflow-hidden bg-navy text-white">
         <div class="pointer-events-none absolute inset-0 opacity-[0.07]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gold/10 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-gold/10 blur-3xl"></div>
 
         <div class="relative mx-auto max-w-5xl px-6 py-20 text-center md:py-28">
-            <span class="inline-block rounded-full border border-white/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-gold">
-                Booking Online 24 Jam
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-gold">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+                Mini Soccer &middot; Meulaboh, Aceh Barat
             </span>
-            <h1 class="mt-5 text-3xl font-bold leading-tight md:text-5xl">
-                Main Futsal Tanpa Ribet,<br class="hidden md:block"> Booking Lapangan Sekarang
+           <h1 class="mt-5 text-3xl font-bold leading-tight md:text-5xl">
+                Rasakan Pengalaman Bermain<br class="hidden md:block">
+                Kelas Profesional
             </h1>
             <p class="mx-auto mt-4 max-w-xl text-white/70">
-                Soccer Bumi Teuku Umar: cek jadwal, pilih jam, dan bayar online langsung dari HP. Tersedia paket bulanan buat kamu yang main rutin.
+                My Soccer Bumi Teuku Umar menghadirkan lapangan mini soccer dengan
+                rumput sintetis berstandar <strong>FIFA Quality Pro</strong>, dilengkapi sistem
+                booking online yang cepat, mudah, dan aman.
             </p>
 
             <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -26,16 +33,16 @@
 
             <div class="mx-auto mt-14 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
                 <div class="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
-                    <div class="text-2xl font-bold text-gold">{{ $daftarLapangan->count() }}</div>
-                    <div class="mt-1 text-xs text-white/60">Lapangan Tersedia</div>
+                    <div class="text-2xl font-bold text-gold">FIFA</div>
+                    <div class="mt-1 text-xs text-white/60">Rumput Standar Quality Pro</div>
                 </div>
                 <div class="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
                     <div class="text-2xl font-bold text-gold">06.00-23.00</div>
-                    <div class="mt-1 text-xs text-white/60">Jam Operasional</div>
+                    <div class="mt-1 text-xs text-white/60">Buka Setiap Hari</div>
                 </div>
                 <div class="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
-                    <div class="text-2xl font-bold text-gold">Midtrans</div>
-                    <div class="mt-1 text-xs text-white/60">Pembayaran Aman</div>
+                    <div class="text-2xl font-bold text-gold">24 Jam</div>
+                    <div class="mt-1 text-xs text-white/60">Booking Online Kapan Saja</div>
                 </div>
             </div>
         </div>
@@ -221,21 +228,27 @@
             <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
                 <div class="relative">
                     <div class="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 shadow-xl ring-1 ring-slate-900/5">
-                        <img src="/tentang-kami.jpg" alt="Lapangan Soccer Bumi Teuku Umar" class="h-full w-full object-cover">
+                        <img src="{{ asset('images/lapangan.webp') }}" alt="Lapangan mini soccer MYSOC - My Soccer Bumi Teuku Umar, Meulaboh" class="h-full w-full object-cover">
                     </div>
                     <div class="absolute -bottom-6 -right-6 hidden rounded-xl bg-navy px-5 py-4 text-white shadow-lg sm:block">
-                        <div class="text-2xl font-bold text-gold">{{ $daftarLapangan->count() }}+</div>
-                        <div class="text-xs text-white/70">Lapangan Berkualitas</div>
+                        <div class="text-2xl font-bold text-gold">FIFA</div>
+                        <div class="text-xs text-white/70">Quality Pro Standard</div>
                     </div>
                 </div>
 
                 <div>
                     <span class="text-xs font-semibold uppercase tracking-wider text-gold">Tentang Kami</span>
-                    <h2 class="mt-2 text-2xl font-bold text-slate-800">Soccer Bumi Teuku Umar</h2>
+                    <h2 class="mt-2 text-2xl font-bold text-slate-800">My Soccer Bumi Teuku Umar</h2>
                     <p class="mt-4 leading-relaxed text-slate-600">
-                        Penyedia lapangan futsal dengan beberapa lapangan berkualitas, terbuka untuk umum maupun
-                        member berlangganan bulanan. Booking jadwal lebih mudah lewat sistem online ini, lihat
-                        ketersediaan lapangan secara real-time dan bayar langsung lewat payment gateway.
+                        MYSOC adalah lapangan mini soccer di Meulaboh, Aceh Barat, dengan rumput sintetis
+                        berstandar internasional <span class="font-semibold text-slate-800">FIFA Quality Pro</span>.
+                        Terbuka untuk booking santai, sparring antar tim, sampai turnamen komunitas — dan jadi markas
+                        latihan Sekolah Sepak Bola (SSB) untuk pemain muda.
+                    </p>
+                    <p class="mt-3 leading-relaxed text-slate-600">
+                        Selesai main, langsung nongkrong di cafe <span class="font-semibold text-slate-800">MYCO. &amp; MY KOPI SARENG</span>
+                        yang ada tepat di samping lapangan. Booking jadwal makin gampang lewat sistem online ini:
+                        lihat ketersediaan real-time, kunci jam favoritmu, bayar langsung dari HP.
                     </p>
                     <a href="#jadwal" class="mt-6 inline-block rounded-lg bg-navy px-6 py-3 font-semibold text-white transition-colors hover:bg-navy-dark">
                         Lihat Jadwal Sekarang
@@ -243,33 +256,79 @@
                 </div>
             </div>
 
-            <div class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3.75-6h.75m-.75 3h.75m-.75 3h.75M6 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21" />
-                        </svg>
-                    </span>
-                    <div class="mt-3 font-semibold text-slate-800">Multi-Lapangan</div>
-                    <div class="mt-1 text-sm text-slate-500">Beberapa lapangan indoor dengan jadwal masing-masing, tinggal pilih yang kosong.</div>
-                </div>
-                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                        </svg>
-                    </span>
-                    <div class="mt-3 font-semibold text-slate-800">Paket Bulanan Member</div>
-                    <div class="mt-1 text-sm text-slate-500">Main rutin tiap minggu? Daftar member dan kunci jadwal favoritmu untuk sebulan.</div>
-                </div>
+            <div class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                         </svg>
                     </span>
+                    <div class="mt-3 font-semibold text-slate-800">Rumput Standar FIFA Quality Pro</div>
+                    <div class="mt-1 text-sm text-slate-500">Rumput sintetis kelas internasional: nyaman di kaki, bola menggelinding mulus, minim cedera.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Sekolah Sepak Bola (SSB)</div>
+                    <div class="mt-1 text-sm text-slate-500">Markas latihan dan pendaftaran SSB untuk pemain muda Meulaboh dan sekitarnya.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Cafe MYCO. &amp; MY KOPI SARENG</div>
+                    <div class="mt-1 text-sm text-slate-500">Kopi dan makanan tepat di pinggir lapangan, tempat nongkrong sebelum dan sesudah main.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                        </svg>
+                    </span>
                     <div class="mt-3 font-semibold text-slate-800">Pembayaran Online Aman</div>
-                    <div class="mt-1 text-sm text-slate-500">Transfer bank, e-wallet, sampai kartu, semua lewat Midtrans dan langsung terkonfirmasi.</div>
+                    <div class="mt-1 text-sm text-slate-500">Transfer bank, e-wallet dan QRIS semua lewat Midtrans dan langsung terkonfirmasi.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6.25 3.75h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Loker Penyimpanan</div>
+                    <div class="mt-1 text-sm text-slate-500">Simpan baju, tas, dan barang bawaanmu di loker, main jadi tenang tanpa jaga barang.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a6.75 6.75 0 006.75-6.75c0-4.5-6.75-10.5-6.75-10.5S5.25 9.75 5.25 14.25A6.75 6.75 0 0012 21z" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Kamar Mandi &amp; Bilas</div>
+                    <div class="mt-1 text-sm text-slate-500">Selesai main bisa langsung mandi di tempat, pulang atau lanjut aktivitas tetap segar.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Sewa Sepatu</div>
+                    <div class="mt-1 text-sm text-slate-500">Nggak bawa sepatu bola? Tenang, tersedia sewa sepatu langsung di lapangan.</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <div class="mt-3 font-semibold text-slate-800">Booking Online 24 Jam</div>
+                    <div class="mt-1 text-sm text-slate-500">Cek jadwal dan kunci slot kapan saja dari HP, tanpa harus datang atau telepon dulu.</div>
                 </div>
             </div>
         </div>
@@ -284,6 +343,16 @@
             </div>
 
             <div class="mt-8 space-y-3">
+                <details class="group rounded-xl border border-slate-200 bg-white p-4 open:shadow-sm">
+                    <summary class="flex cursor-pointer list-none items-center justify-between font-medium text-slate-800">
+                        Mini soccer itu apa bedanya dengan futsal?
+                        <span class="ml-4 shrink-0 text-slate-400 transition-transform group-open:rotate-45">&#43;</span>
+                    </summary>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                        Mini soccer dimainkan di lapangan rumput sintetis yang lebih luas dari futsal (biasanya 7 vs 7), dengan bola dan aturan yang lebih dekat ke sepak bola sungguhan. Di MYSOC, rumputnya berstandar FIFA Quality Pro — jadi rasanya seperti main di lapangan bola beneran.
+                    </p>
+                </details>
+
                 <details class="group rounded-xl border border-slate-200 bg-white p-4 open:shadow-sm">
                     <summary class="flex cursor-pointer list-none items-center justify-between font-medium text-slate-800">
                         Apakah harus punya akun untuk booking?
@@ -386,8 +455,4 @@
             </div>
         </div>
     </section>
-
-    <footer class="bg-navy-dark py-8 text-center text-xs text-white/50">
-        &copy; {{ now()->year }} Soccer Bumi Teuku Umar. Semua hak dilindungi.
-    </footer>
 </x-layouts.site>

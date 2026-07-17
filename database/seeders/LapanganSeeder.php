@@ -16,7 +16,7 @@ class LapanganSeeder extends Seeder
         foreach (['Lapangan A', 'Lapangan B'] as $nama) {
             $lapangan = Lapangan::updateOrCreate(
                 ['nama' => $nama],
-                ['deskripsi' => 'Lapangan futsal indoor vinyl.', 'is_active' => true]
+                ['deskripsi' => 'Lapangan mini soccer rumput sintetis standar FIFA Quality Pro.', 'is_active' => true]
             );
 
             for ($hour = 6; $hour < 23; $hour++) {

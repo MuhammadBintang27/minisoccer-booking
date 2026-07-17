@@ -1,7 +1,7 @@
-<x-layouts.site title="Beli Paket Bulanan">
+<x-layouts.site title="Beli Paket Bulanan - MYSOC Meulaboh">
     <section class="mx-auto max-w-2xl px-4 py-10 md:px-6">
         <h1 class="text-xl font-semibold text-slate-800">Beli Paket Bulanan</h1>
-        <p class="mt-1 text-sm text-slate-500">Pilih lapangan, hari, dan bulan buat lihat jam mana saja yang kosong 4 minggu ke depan.</p>
+        <p class="mt-1 text-sm text-slate-500">Kunci jadwal main mingguan kamu di MYSOC: pilih lapangan, hari, dan bulan buat lihat jam mana saja yang kosong 4 minggu ke depan.</p>
 
         <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <div class="flex items-center gap-2">

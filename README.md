@@ -1,6 +1,6 @@
-# Soccer Bumi Teuku Umar — Sistem Booking Lapangan Futsal Online
+# MYSOC (My Soccer Bumi Teuku Umar) — Sistem Booking Lapangan Mini Soccer Online
 
-Aplikasi booking lapangan futsal berbasis Laravel untuk **Soccer Bumi Teuku Umar**. Mendukung booking sekali main untuk pengunjung umum (guest) maupun paket langganan bulanan untuk member terdaftar, lengkap dengan pembayaran online (Midtrans), pembayaran tunai di tempat, dan panel admin untuk mengelola semuanya.
+Aplikasi booking lapangan mini soccer berbasis Laravel untuk **MYSOC — My Soccer Bumi Teuku Umar**, Meulaboh, Aceh Barat (lapangan rumput sintetis standar FIFA Quality Pro). Mendukung booking sekali main untuk pengunjung umum (guest) maupun paket langganan bulanan untuk member terdaftar, lengkap dengan pembayaran online (Midtrans), pembayaran tunai di tempat, dan panel admin untuk mengelola semuanya.
 
 ## Fitur Utama
 
