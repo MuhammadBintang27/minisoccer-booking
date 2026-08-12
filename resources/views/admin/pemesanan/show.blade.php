@@ -34,7 +34,7 @@
             <div class="mt-4 space-y-1 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">
                 <div class="flex justify-between"><span>Sewa Lapangan</span><span class="tabular-nums">Rp{{ number_format($pemesanan->harga, 0, ',', '.') }}</span></div>
                 @foreach ($pemesanan->layananTambahan as $addon)
-                    <div class="flex justify-between"><span>{{ $addon->nama }}</span><span class="tabular-nums">Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }}</span></div>
+                    <div class="flex justify-between"><span>{{ $addon->nama }}@if ($addon->pivot->jumlah > 1) &times; {{ $addon->pivot->jumlah }}@endif</span><span class="tabular-nums">Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }}</span></div>
                 @endforeach
                 <div class="flex justify-between border-t border-slate-200 pt-1 font-semibold text-slate-800">
                     <span>Total Tagihan</span><span class="tabular-nums">Rp{{ number_format($pemesanan->totalHarga(), 0, ',', '.') }}</span>

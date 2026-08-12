@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->decimal('harga', 10, 2);
+            // Layanan berbasis paket/durasi (mis. "Fotografer 2 Jam") biarkan false — jumlah dikunci 1,
+            // varian durasinya cukup dibuat sebagai baris terpisah. Layanan berbasis satuan (mis. Rompi)
+            // diaktifkan supaya customer bisa isi berapa unit yang dipesan.
+            $table->boolean('pakai_jumlah')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

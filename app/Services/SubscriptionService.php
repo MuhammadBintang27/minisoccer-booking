@@ -60,9 +60,9 @@ class SubscriptionService
 
     /**
      * @param  Collection<int, \App\Models\JadwalLapangan>  $slots  slot jam berurutan yang dipilih (bisa lebih dari 1)
-     * @param  array<int>  $addonIds
+     * @param  array<int, int>  $addonQuantities  [layanan_tambahan_id => jumlah], lepas dari jumlah jam lapangan
      */
-    public function createSubscription(Member $member, Lapangan $lapangan, Collection $slots, int $hariIso, Carbon $bulan, array $addonIds = []): PaketLangganan
+    public function createSubscription(Member $member, Lapangan $lapangan, Collection $slots, int $hariIso, Carbon $bulan, array $addonQuantities = []): PaketLangganan
     {
         $this->availability->validateSlotsContiguous($slots);
 
@@ -78,12 +78,12 @@ class SubscriptionService
 
         // hari (weekday/weekend) sama untuk semua kemunculan tanggal karena hari-dalam-minggu-nya tetap
         $hargaPerPertemuan = $sorted->sum(fn ($slot) => $slot->hargaUntukTanggal($tanggalList[0], 'member'));
-        $jumlahJam = $sorted->count();
 
-        $addons = LayananTambahan::whereIn('id', $addonIds)->where('is_active', true)->get();
-        $addonPerPertemuan = $addons->sum('harga') * $jumlahJam;
+        $addons = LayananTambahan::whereIn('id', array_keys($addonQuantities))->where('is_active', true)->get();
+        // Kunci ke 1 kalau layanan ini nggak diizinkan pakai jumlah, terlepas dari apa yang dikirim client.
+        $addonPerPertemuan = $addons->sum(fn ($addon) => $addon->harga * ($addon->pakai_jumlah ? max(1, (int) $addonQuantities[$addon->id]) : 1));
 
-        return DB::transaction(function () use ($member, $lapangan, $jamMulai, $jamSelesai, $tanggalList, $hargaPerPertemuan, $addonPerPertemuan, $addons, $jumlahJam) {
+        return DB::transaction(function () use ($member, $lapangan, $jamMulai, $jamSelesai, $tanggalList, $hargaPerPertemuan, $addonPerPertemuan, $addons, $addonQuantities) {
             Lapangan::where('id', $lapangan->id)->lockForUpdate()->first();
 
             $tanggalString = array_map(fn (Carbon $d) => $d->toDateString(), $tanggalList);
@@ -129,7 +129,12 @@ class SubscriptionService
                 ]);
 
                 foreach ($addons as $addon) {
-                    $pemesanan->layananTambahan()->attach($addon->id, ['harga' => $addon->harga * $jumlahJam]);
+                    $jumlah = $addon->pakai_jumlah ? max(1, (int) $addonQuantities[$addon->id]) : 1;
+
+                    $pemesanan->layananTambahan()->attach($addon->id, [
+                        'harga' => $addon->harga * $jumlah,
+                        'jumlah' => $jumlah,
+                    ]);
                 }
             }
 

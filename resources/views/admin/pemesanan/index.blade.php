@@ -77,7 +77,7 @@
                         <td class="px-4 py-3.5 text-slate-500">{{ $item['status_bayar'] }}</td>
                         <td class="px-4 py-3.5 text-slate-600">
                             @forelse ($item['addons'] as $addon)
-                                <div>{{ $addon->nama }} <span class="text-slate-400">(Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }})</span></div>
+                                <div>{{ $addon->nama }}@if ($addon->pivot->jumlah > 1) &times; {{ $addon->pivot->jumlah }}@endif <span class="text-slate-400">(Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }})</span></div>
                             @empty
                                 <span class="text-slate-300">-</span>
                             @endforelse

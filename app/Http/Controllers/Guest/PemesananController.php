@@ -41,6 +41,7 @@ class PemesananController extends Controller
             ->whereIn('id', $validated['jadwal_id'])
             ->get();
         $tanggal = Carbon::parse($validated['tanggal']);
+        $addonQuantities = $this->addonQuantities($validated);
 
         try {
             $pemesanan = $bookingService->createGuestBooking(
@@ -49,7 +50,7 @@ class PemesananController extends Controller
                 $tanggal,
                 $validated['nama_tamu'],
                 $validated['no_hp_tamu'],
-                $validated['layanan_tambahan_id'] ?? [],
+                $addonQuantities,
             );
         } catch (SlotTidakTersediaException $e) {
             return back()->withInput()->withErrors(['jadwal_id' => $e->getMessage()]);

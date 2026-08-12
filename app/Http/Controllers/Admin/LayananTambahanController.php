@@ -26,6 +26,7 @@ class LayananTambahanController extends Controller
     {
         LayananTambahan::create([
             ...$request->validated(),
+            'pakai_jumlah' => $request->boolean('pakai_jumlah'),
             'is_active' => $request->boolean('is_active'),
         ]);
 
@@ -41,6 +42,7 @@ class LayananTambahanController extends Controller
     {
         $layananTambahan->update([
             ...$request->validated(),
+            'pakai_jumlah' => $request->boolean('pakai_jumlah'),
             'is_active' => $request->boolean('is_active'),
         ]);
 

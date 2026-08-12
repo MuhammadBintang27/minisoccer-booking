@@ -67,7 +67,7 @@ class Pemesanan extends Model
     public function layananTambahan(): BelongsToMany
     {
         return $this->belongsToMany(LayananTambahan::class, 'pemesanan_layanan_tambahan')
-            ->withPivot('harga')
+            ->withPivot('harga', 'jumlah')
             ->withTimestamps();
     }
 

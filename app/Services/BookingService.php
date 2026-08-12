@@ -21,11 +21,11 @@ class BookingService
 
     /**
      * @param  Collection<int, \App\Models\JadwalLapangan>  $slots  slot jam berurutan yang dipilih (bisa lebih dari 1)
-     * @param  array<int>  $addonIds
+     * @param  array<int, int>  $addonQuantities  [layanan_tambahan_id => jumlah], lepas dari jumlah jam lapangan
      */
-    public function createGuestBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, string $namaTamu, string $noHpTamu, array $addonIds = []): Pemesanan
+    public function createGuestBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, string $namaTamu, string $noHpTamu, array $addonQuantities = []): Pemesanan
     {
-        return $this->createBooking($lapangan, $slots, $tanggal, $addonIds, [
+        return $this->createBooking($lapangan, $slots, $tanggal, $addonQuantities, [
             'sumber' => 'guest',
             'nama_tamu' => $namaTamu,
             'no_hp_tamu' => $noHpTamu,
@@ -34,11 +34,11 @@ class BookingService
 
     /**
      * @param  Collection<int, \App\Models\JadwalLapangan>  $slots
-     * @param  array<int>  $addonIds
+     * @param  array<int, int>  $addonQuantities  [layanan_tambahan_id => jumlah]
      */
-    public function createMemberBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, Member $member, array $addonIds = []): Pemesanan
+    public function createMemberBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, Member $member, array $addonQuantities = []): Pemesanan
     {
-        return $this->createBooking($lapangan, $slots, $tanggal, $addonIds, [
+        return $this->createBooking($lapangan, $slots, $tanggal, $addonQuantities, [
             'sumber' => 'member',
             'member_id' => $member->id,
         ]);
@@ -46,9 +46,9 @@ class BookingService
 
     /**
      * @param  Collection<int, \App\Models\JadwalLapangan>  $slots
-     * @param  array<int>  $addonIds
+     * @param  array<int, int>  $addonQuantities
      */
-    private function createBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, array $addonIds, array $extra): Pemesanan
+    private function createBooking(Lapangan $lapangan, Collection $slots, Carbon $tanggal, array $addonQuantities, array $extra): Pemesanan
     {
         $this->availability->validateSlotsContiguous($slots);
 
@@ -56,13 +56,12 @@ class BookingService
         $jamMulai = $sorted->first()->jam_mulai;
         $jamSelesai = $sorted->last()->jam_selesai;
         $harga = $sorted->sum(fn ($slot) => $slot->hargaUntukTanggal($tanggal, $extra['sumber']));
-        $jumlahJam = $sorted->count();
 
         if ($tanggal->isToday() && $jamMulai <= now()->format('H:i:s')) {
             throw new SlotTidakTersediaException('Slot jam ini sudah lewat untuk hari ini. Silakan pilih jam lain.');
         }
 
-        return DB::transaction(function () use ($lapangan, $tanggal, $jamMulai, $jamSelesai, $harga, $jumlahJam, $addonIds, $extra) {
+        return DB::transaction(function () use ($lapangan, $tanggal, $jamMulai, $jamSelesai, $harga, $addonQuantities, $extra) {
             Lapangan::where('id', $lapangan->id)->lockForUpdate()->first();
 
             $bentrok = Pemesanan::where('lapangan_id', $lapangan->id)
@@ -87,27 +86,35 @@ class BookingService
                 'hold_expires_at' => now()->addMinutes(15),
             ]);
 
-            $this->attachAddons($pemesanan, $addonIds, $jumlahJam);
+            $this->attachAddons($pemesanan, $addonQuantities);
 
             return $pemesanan;
         });
     }
 
     /**
-     * Harga add-on dikali jumlah jam yang dipesan (misal fotografer 1 jam main = 1x harga, 2 jam main = 2x harga).
+     * Harga & jumlah add-on lepas dari jumlah jam lapangan yang dipesan — customer pilih sendiri
+     * berapa jumlah tiap layanan (mis. fotografer dipilih sebagai varian durasi terpisah, jumlah
+     * tetap 1; rompi jumlahnya bisa lebih dari 1 set).
      *
-     * @param  array<int>  $addonIds
+     * @param  array<int, int>  $addonQuantities  [layanan_tambahan_id => jumlah]
      */
-    public function attachAddons(Pemesanan $pemesanan, array $addonIds, int $jumlahJam = 1): void
+    public function attachAddons(Pemesanan $pemesanan, array $addonQuantities): void
     {
-        if (empty($addonIds)) {
+        if (empty($addonQuantities)) {
             return;
         }
 
-        $addons = LayananTambahan::whereIn('id', $addonIds)->where('is_active', true)->get();
+        $addons = LayananTambahan::whereIn('id', array_keys($addonQuantities))->where('is_active', true)->get();
 
         foreach ($addons as $addon) {
-            $pemesanan->layananTambahan()->attach($addon->id, ['harga' => $addon->harga * $jumlahJam]);
+            // Kunci ke 1 kalau layanan ini nggak diizinkan pakai jumlah, terlepas dari apa yang dikirim client.
+            $jumlah = $addon->pakai_jumlah ? max(1, (int) $addonQuantities[$addon->id]) : 1;
+
+            $pemesanan->layananTambahan()->attach($addon->id, [
+                'harga' => $addon->harga * $jumlah,
+                'jumlah' => $jumlah,
+            ]);
         }
     }
 

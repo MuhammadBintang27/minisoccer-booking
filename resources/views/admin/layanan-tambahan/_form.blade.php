@@ -14,9 +14,26 @@
     </div>
 
     <div>
-        <label for="harga" class="block text-sm font-medium text-slate-700">Harga (per jam main)</label>
+        <label for="harga" class="block text-sm font-medium text-slate-700">Harga</label>
         <input id="harga" type="text" inputmode="numeric" name="harga" value="{{ old('harga', isset($layanan) ? number_format($layanan->harga, 0, '', '') : '') }}" required
             class="input-rupiah mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+        <p class="mt-1 text-xs text-slate-400">Harga untuk 1x pilih layanan ini.</p>
+    </div>
+
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <input type="checkbox" name="pakai_jumlah" value="1" {{ old('pakai_jumlah', $layanan->pakai_jumlah ?? false) ? 'checked' : '' }} class="rounded border-slate-300 text-navy focus:ring-navy/30">
+            Customer bisa pilih jumlah
+        </label>
+        <ul class="mt-2 space-y-1 pl-6 text-xs text-slate-500">
+            <li>✅ Nyala → muncul kolom jumlah. Contoh: Rompi, customer isi mau berapa set.</li>
+            <li>⬜ Mati → cuma centang ada/tidak, jumlah otomatis 1.</li>
+        </ul>
+    </div>
+
+    <div class="rounded-lg border border-gold/40 bg-gold/5 p-3 text-xs leading-relaxed text-slate-600">
+        <span class="font-semibold text-slate-700">Kalau harganya beda per durasi</span> (mis. Fotografer 1 Jam Rp300rb, 2 Jam Rp500rb),
+        jangan pakai jumlah untuk itu — buat 2 layanan terpisah: "Fotografer 1 Jam" dan "Fotografer 2 Jam", masing-masing harganya sendiri.
     </div>
 
     <label class="flex items-center gap-2 text-sm text-slate-700">

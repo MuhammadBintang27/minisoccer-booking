@@ -37,7 +37,7 @@
                     <div class="mt-1 text-xs text-white/60">Rumput Standar Quality Pro</div>
                 </div>
                 <div class="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
-                    <div class="text-2xl font-bold text-gold">06.00-23.00</div>
+                    <div class="text-2xl font-bold text-gold">06.00-02.00</div>
                     <div class="mt-1 text-xs text-white/60">Buka Setiap Hari</div>
                 </div>
                 <div class="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
@@ -256,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -265,15 +265,6 @@
                     </span>
                     <div class="mt-3 font-semibold text-slate-800">Rumput Standar FIFA Quality Pro</div>
                     <div class="mt-1 text-sm text-slate-500">Rumput sintetis kelas internasional: nyaman di kaki, bola menggelinding mulus, minim cedera.</div>
-                </div>
-                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                        </svg>
-                    </span>
-                    <div class="mt-3 font-semibold text-slate-800">Sekolah Sepak Bola (SSB)</div>
-                    <div class="mt-1 text-sm text-slate-500">Markas latihan dan pendaftaran SSB untuk pemain muda Meulaboh dan sekitarnya.</div>
                 </div>
                 <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
@@ -310,16 +301,6 @@
                     </span>
                     <div class="mt-3 font-semibold text-slate-800">Kamar Mandi &amp; Bilas</div>
                     <div class="mt-1 text-sm text-slate-500">Selesai main bisa langsung mandi di tempat, pulang atau lanjut aktivitas tetap segar.</div>
-                </div>
-                <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
-                        </svg>
-                    </span>
-                    <div class="mt-3 font-semibold text-slate-800">Sewa Sepatu</div>
-                    <div class="mt-1 text-sm text-slate-500">Nggak bawa sepatu bola? Tenang, tersedia sewa sepatu langsung di lapangan.</div>
                 </div>
                 <div class="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md">
                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gold/20 text-navy">

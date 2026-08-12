@@ -30,6 +30,8 @@ class PemesananRequest extends FormRequest
             'no_hp_tamu' => ['required', 'string', 'max:20'],
             'layanan_tambahan_id' => ['sometimes', 'array'],
             'layanan_tambahan_id.*' => ['exists:layanan_tambahan,id'],
+            'layanan_tambahan_jumlah' => ['sometimes', 'array'],
+            'layanan_tambahan_jumlah.*' => ['integer', 'min:1', 'max:20'],
         ];
     }
 }

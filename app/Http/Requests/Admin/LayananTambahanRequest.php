@@ -24,6 +24,7 @@ class LayananTambahanRequest extends FormRequest
         return [
             'nama' => ['required', 'string', 'max:255'],
             'harga' => ['required', 'numeric', 'min:0'],
+            'pakai_jumlah' => ['sometimes', 'boolean'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }

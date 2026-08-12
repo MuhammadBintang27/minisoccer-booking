@@ -40,7 +40,7 @@
                 </div>
                 @foreach ($paket->rincianAddon() as $addon)
                     <div class="flex justify-between">
-                        <span>{{ $addon->nama }} ({{ $paket->jumlah_pertemuan }}x)</span>
+                        <span>{{ $addon->nama }} (@if ($addon->pivot->jumlah > 1){{ $addon->pivot->jumlah }} &times; @endif{{ $paket->jumlah_pertemuan }}x)</span>
                         <span>Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }}</span>
                     </div>
                 @endforeach

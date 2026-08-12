@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pemesanan_id')->constrained('pemesanan')->cascadeOnDelete();
             $table->foreignId('layanan_tambahan_id')->constrained('layanan_tambahan')->cascadeOnDelete();
+            $table->unsignedInteger('jumlah')->default(1);
             $table->decimal('harga', 10, 2);
             $table->timestamps();
         });

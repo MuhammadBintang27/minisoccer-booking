@@ -29,6 +29,8 @@ class LanggananRequest extends FormRequest
             'bulan' => ['required', 'date_format:Y-m'],
             'layanan_tambahan_id' => ['sometimes', 'array'],
             'layanan_tambahan_id.*' => ['exists:layanan_tambahan,id'],
+            'layanan_tambahan_jumlah' => ['sometimes', 'array'],
+            'layanan_tambahan_jumlah.*' => ['integer', 'min:1', 'max:20'],
         ];
     }
 }

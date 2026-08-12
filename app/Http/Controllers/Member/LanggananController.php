@@ -66,6 +66,7 @@ class LanggananController extends Controller
             ->whereIn('id', $validated['jadwal_id'])
             ->get();
         $bulan = Carbon::parse($validated['bulan'].'-01');
+        $addonQuantities = $this->addonQuantities($validated);
 
         try {
             $paket = $subscriptionService->createSubscription(
@@ -74,7 +75,7 @@ class LanggananController extends Controller
                 $slots,
                 (int) $validated['hari'],
                 $bulan,
-                $validated['layanan_tambahan_id'] ?? [],
+                $addonQuantities,
             );
         } catch (SlotTidakTersediaException $e) {
             return back()->withInput()->withErrors(['jadwal_id' => $e->getMessage()]);

@@ -48,7 +48,7 @@
                     </div>
                     @foreach ($pemesanan->layananTambahan as $addon)
                         <div class="flex justify-between">
-                            <span>{{ $addon->nama }}</span>
+                            <span>{{ $addon->nama }}@if ($addon->pivot->jumlah > 1) &times; {{ $addon->pivot->jumlah }}@endif</span>
                             <span>Rp{{ number_format($addon->pivot->harga, 0, ',', '.') }}</span>
                         </div>
                     @endforeach

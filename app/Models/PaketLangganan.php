@@ -79,7 +79,10 @@ class PaketLangganan extends Model
             ->groupBy('id')
             ->map(function (Collection $grup) {
                 $addon = $grup->first();
+                // Jumlah per pertemuan sama tiap minggu (dipilih sekali saat checkout), jadi ambil salah satu saja.
+                $jumlahPerPertemuan = $addon->pivot->jumlah;
                 $addon->pivot->harga = $grup->sum('pivot.harga');
+                $addon->pivot->jumlah = $jumlahPerPertemuan;
 
                 return $addon;
             })

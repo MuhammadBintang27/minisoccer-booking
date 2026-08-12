@@ -73,21 +73,26 @@
 
                     @if ($layananTambahan->isNotEmpty())
                         <div>
-                            <div class="block text-sm font-medium text-slate-700">Layanan Tambahan <span class="font-normal text-slate-400">(opsional, dihitung per jam main)</span></div>
+                            <div class="block text-sm font-medium text-slate-700">Layanan Tambahan <span class="font-normal text-slate-400">(opsional)</span></div>
                             <div class="mt-2 space-y-2">
                                 @foreach ($layananTambahan as $addon)
-                                    <label class="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors hover:border-slate-300 has-[:checked]:border-gold has-[:checked]:bg-gold/10">
+                                    <label class="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors hover:border-slate-300 has-[:checked]:border-gold has-[:checked]:bg-gold/10">
                                         <span class="flex items-center gap-2">
                                             <input type="checkbox" name="layanan_tambahan_id[]" value="{{ $addon->id }}" class="rounded border-slate-300 text-navy focus:ring-navy/30">
                                             {{ $addon->nama }}
                                         </span>
-                                        <span class="text-xs text-slate-500">
-                                            Rp{{ number_format($addon->harga, 0, ',', '.') }}/jam
-                                            &times; {{ $slots->count() }} jam = Rp{{ number_format($addon->harga * $slots->count(), 0, ',', '.') }}
+                                        <span class="flex items-center gap-2">
+                                            <span class="text-xs text-slate-500">Rp{{ number_format($addon->harga, 0, ',', '.') }}</span>
+                                            @if ($addon->pakai_jumlah)
+                                                <input type="number" name="layanan_tambahan_jumlah[{{ $addon->id }}]" value="1" min="1" max="20"
+                                                    aria-label="Jumlah {{ $addon->nama }}"
+                                                    class="w-14 rounded-lg border border-slate-300 px-2 py-1 text-xs focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy/30">
+                                            @endif
                                         </span>
                                     </label>
                                 @endforeach
                             </div>
+                            <p class="mt-1.5 text-xs text-slate-400">Jumlah hanya berlaku untuk layanan yang dicentang.</p>
                         </div>
                     @endif
 

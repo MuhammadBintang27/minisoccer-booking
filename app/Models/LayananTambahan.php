@@ -11,6 +11,7 @@ class LayananTambahan extends Model
     protected $fillable = [
         'nama',
         'harga',
+        'pakai_jumlah',
         'is_active',
     ];
 
@@ -18,6 +19,7 @@ class LayananTambahan extends Model
     {
         return [
             'harga' => 'decimal:2',
+            'pakai_jumlah' => 'boolean',
             'is_active' => 'boolean',
         ];
     }
