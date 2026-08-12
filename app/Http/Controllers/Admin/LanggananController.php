@@ -14,7 +14,7 @@ class LanggananController extends Controller
     public function show(PaketLangganan $paket): View
     {
         $paket->load([
-            'lapangan',
+            'lapangan' => fn ($q) => $q->withTrashed(),
             'member.user',
             'pembayaran' => fn ($q) => $q->orderByDesc('created_at'),
             'pemesanan' => fn ($q) => $q->with('layananTambahan')->orderBy('tanggal_main'),

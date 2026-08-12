@@ -33,7 +33,7 @@ class PemesananController extends Controller
             'cancelled' => 'cancelled',
         ];
 
-        $guestQuery = Pemesanan::with(['lapangan', 'layananTambahan', 'pembayaran'])
+        $guestQuery = Pemesanan::with(['lapangan' => fn ($q) => $q->withTrashed(), 'layananTambahan', 'pembayaran'])
             ->where('sumber', 'guest');
 
         if ($lapanganId) {
@@ -49,7 +49,7 @@ class PemesananController extends Controller
             $guestQuery->where('nama_tamu', 'like', '%'.$cari.'%');
         }
 
-        $paketQuery = PaketLangganan::with(['lapangan', 'member.user', 'pembayaran', 'pemesanan.layananTambahan']);
+        $paketQuery = PaketLangganan::with(['lapangan' => fn ($q) => $q->withTrashed(), 'member.user', 'pembayaran', 'pemesanan.layananTambahan']);
 
         if ($lapanganId) {
             $paketQuery->where('lapangan_id', $lapanganId);
@@ -141,7 +141,7 @@ class PemesananController extends Controller
     {
         abort_if($pemesanan->sumber === 'member', 404);
 
-        $pemesanan->load(['lapangan', 'layananTambahan', 'pembayaran' => fn ($q) => $q->orderByDesc('created_at')]);
+        $pemesanan->load(['lapangan' => fn ($q) => $q->withTrashed(), 'layananTambahan', 'pembayaran' => fn ($q) => $q->orderByDesc('created_at')]);
 
         return view('admin.pemesanan.show', compact('pemesanan'));
     }
