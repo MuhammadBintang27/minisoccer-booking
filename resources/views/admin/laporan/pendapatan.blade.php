@@ -64,7 +64,7 @@
                         <td class="px-4 py-3.5 text-slate-600">{{ $item->midtrans_order_id ?? '-' }}</td>
                         <td class="px-4 py-3.5">
                             <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold {{ $item->payable_type === \App\Models\PaketLangganan::class ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600' }}">
-                                {{ $item->payable_type === \App\Models\PaketLangganan::class ? 'Member' : 'Guest' }}
+                                {{ $item->payable_type === \App\Models\PaketLangganan::class ? 'Member' : 'Non Member' }}
                             </span>
                         </td>
                         <td class="px-4 py-3.5 text-slate-600">{{ $item->channel === 'cash' ? 'Cash' : ($item->metode_pembayaran ?? 'Online') }}</td>

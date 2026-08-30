@@ -66,7 +66,7 @@
                                 <div class="text-xs text-slate-500">{{ $item->tanggal_main->translatedFormat('d M Y') }}, {{ substr($item->jam_mulai, 0, 5) }}-{{ substr($item->jam_selesai, 0, 5) }}</div>
                             </div>
                         </div>
-                        <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">Guest</span>
+                        <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">Non Member</span>
                     </a>
                 @empty
                 @endforelse

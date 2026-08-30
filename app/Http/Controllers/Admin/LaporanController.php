@@ -36,7 +36,7 @@ class LaporanController extends Controller
         $csv = "Tanggal Bayar,Order ID,Sumber,Metode,Jumlah\n";
 
         foreach ($pembayaran as $item) {
-            $sumber = $item->payable_type === PaketLangganan::class ? 'Member' : 'Guest';
+            $sumber = $item->payable_type === PaketLangganan::class ? 'Member' : 'Non Member';
             $metode = $item->channel === 'cash' ? 'Cash' : ($item->metode_pembayaran ?? 'Online');
             $csv .= sprintf(
                 "%s,%s,%s,%s,%s\n",

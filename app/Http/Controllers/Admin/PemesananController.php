@@ -90,7 +90,7 @@ class PemesananController extends Controller
                 'tanggal_label' => $item->tanggal_main->translatedFormat('d M Y'),
                 'jam_label' => substr($item->jam_mulai, 0, 5).'-'.substr($item->jam_selesai, 0, 5),
                 'lapangan' => $item->lapangan->nama,
-                'sumber_label' => 'Guest',
+                'sumber_label' => 'Non Member',
                 'nama' => $item->nama_tamu,
                 'status' => $item->status,
                 'status_bayar' => ucfirst($item->statusPembayaran()),
