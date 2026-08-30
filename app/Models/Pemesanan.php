@@ -80,7 +80,7 @@ class Pemesanan extends Model
             return $this->member?->user?->name ?? 'Member';
         }
 
-        return $this->nama_tamu ?? 'Guest';
+        return $this->nama_tamu ?? 'Non Member';
     }
 
     public function totalHarga(): float

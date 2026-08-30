@@ -400,7 +400,7 @@
                         <span class="ml-4 shrink-0 text-slate-400 transition-transform group-open:rotate-45">&#43;</span>
                     </summary>
                     <p class="mt-3 text-sm leading-relaxed text-slate-600">
-                        Kalau booking tanpa akun (guest), buka halaman "Cek Booking" dan masukkan nomor HP yang dipakai saat pemesanan. Kalau member, tinggal buka menu "Riwayat Pemesanan" setelah login.
+                        Kalau booking tanpa akun (non member), buka halaman "Cek Booking" dan masukkan nomor HP yang dipakai saat pemesanan. Kalau member, tinggal buka menu "Riwayat Pemesanan" setelah login.
                     </p>
                 </details>
 
